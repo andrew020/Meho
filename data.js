@@ -56,32 +56,14 @@ Template.schema = {
 };
 
 let staticRealm = null;
-let favouriteRealm = null;
 let favouriteNotify = null;
+let favourites = null;
 
-function openRealm(callback) {
-    if (null === staticRealm) {
-    Realm.open({ schema: [User.schema] })
-        .then(realm => {
-            staticRealm = realm;
-            callback(realm);
-            realm.close();
-            staticRealm = null;
-        })
-        .catch(error => {
-            callback(null);
-        });
-    }
-    else {
-        callback(staticRealm);
-    }
-}
-
-function openRealmWith(dustRealm, schema, callback) {
-    if (null === dustRealm) {
-        Realm.open({ schema: schema })
+function openRealm(keepRealm, callback) {
+    if (keepRealm || null === staticRealm) {
+        Realm.open({ schema: [User.schema, Favourite.schema] })
             .then(realm => {
-                dustRealm = realm;
+                staticRealm = realm;
                 callback(realm);
             })
             .catch(error => {
@@ -89,7 +71,7 @@ function openRealmWith(dustRealm, schema, callback) {
             });
     }
     else {
-        callback(dustRealm);
+        callback(staticRealm);
     }
 }
 
@@ -101,7 +83,7 @@ function uuidv4() {
 }
 
 function addFavourite(images, title, text, goodsID, templateID, callback) {
-    openRealmWith(favouriteRealm, [Favourite.schema], realm => {
+    openRealm(true, realm => {
 
         if (null === realm) {
             callback(false, error);
@@ -128,35 +110,6 @@ function addFavourite(images, title, text, goodsID, templateID, callback) {
 
         callback(true, null);
     });
-
-    // Realm.open({ schema: [Favourite.schema] })
-    //     .then(realm => {
-
-    //         var id = uuidv4();
-    //         var timestamp = Math.floor(Date.now() / 1000);
-
-    //         realm.write(() => {
-    //             realm.create(
-    //                 'Favourite',
-    //                 {
-    //                     id: id,
-    //                     images: images,
-    //                     text: text,
-    //                     goodsID: goodsID,
-    //                     templateID: templateID,
-    //                     createTimeStamp: timestamp,
-    //                 },
-    //                 true
-    //             );
-    //         });
-
-    //         realm.close();
-
-    //         callback(true, null);
-    //     })
-    //     .catch(error => {
-    //         callback(false, error);
-    //     });
 }
 
 function sendNewFavourites(objects) {
@@ -164,7 +117,7 @@ function sendNewFavourites(objects) {
         favouriteNotify([]);
         return;
     }
-    
+
     let sortedObjects = objects.sorted('createTimeStamp');
     var arrayResults = Array.from(sortedObjects)
     var results = [];
@@ -172,14 +125,21 @@ function sendNewFavourites(objects) {
         // id: 'string',
         // images: 'string[]',
         // text: 'string',
+        // title: 'string',
         // goodsID: 'string',
         // templateID: 'string',
         // createTimeStamp: 'float',
         var item = arrayResults[index];
         var data = {};
         data['key'] = item.id;
-        var images = Array.from(item.images)
-        data['images'] = images;
+        // var images = [];
+        // let imageObjects = Array.from(item.images);
+        // for (var indexForImage = 0; indexForImage < imageObjects.length; indexForImage++) {
+        //     let imageObject = imageObjects[indexForImage];
+        //     images.push(imageObject);
+        // }
+        data['images'] = Array.from(item.images);
+        data['title'] = item.title;
         data['text'] = item.text;
         data['goodsID'] = item.goodsID;
         data['templateID'] = item.templateID;
@@ -189,7 +149,7 @@ function sendNewFavourites(objects) {
 }
 
 function deleteFavourite(id) {
-    openRealmWith(favouriteRealm, [Favourite.schema], realm => {
+    openRealm(true, realm => {
         if (!realm) {
             return;
         }
@@ -202,54 +162,19 @@ function deleteFavourite(id) {
 }
 
 function getFavourites(callback) {
-    openRealmWith(favouriteRealm, [Favourite.schema], realm => {
+    openRealm(true, realm => {
         favouriteNotify = callback;
-        if (realm) {
-            var objects = realm.objects('Favourite');
-            sendNewFavourites(objects);
-            objects.addListener((pupies, changes) => {
-                sendNewFavourites(pupies);
+        if (realm && !favourites) {
+            favourites = realm.objects('Favourite');
+            favourites.addListener((pupies, changes) => {
+                sendNewFavourites(favourites);
             });
         }
-        else {
-            callback([]);
-        }
     });
-
-    // Realm.open({ schema: [Favourite.schema] })
-    //     .then(realm => {
-    //         var objects = realm.objects('Favourite');
-    //         //const arrayResults = _.values(objects)
-    //         var arrayResults = Array.from(objects)
-    //         var results = [];
-    //         for (var index = 0; index < arrayResults.length; index++) {
-    //             // id: 'string',
-    //             // images: 'string[]',
-    //             // text: 'string',
-    //             // goodsID: 'string',
-    //             // templateID: 'string',
-    //             // createTimeStamp: 'float',
-    //             var item = arrayResults[index];
-    //             var data = {};
-    //             data['key'] = item.id;
-    //             var images = Array.from(item.images)
-    //             data['images'] = images;
-    //             data['text'] = item.text;
-    //             data['goodsID'] = item.goodsID;
-    //             data['templateID'] = item.templateID;
-    //             results.push(data);
-    //         }
-    //         realm.close();
-    //         callback(results);
-
-    //     })
-    //     .catch(error => {
-    //         callback([]);
-    //     });
 }
 
 function checkUser(callback) {
-    openRealm(realm => {
+    openRealm(false, realm => {
         let users = realm.objects('User');
         if (users && 0 != users.length) {
             let user = users[0]
@@ -268,7 +193,7 @@ function setUser(userID,
     phoneNumber,
     wxOpenID,
     callback) {
-    openRealm(realm => {
+    openRealm(false, realm => {
         try {
             realm.write(() => {
                 let allUsers = realm.objects('User');

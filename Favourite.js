@@ -17,7 +17,7 @@ export default class Favourites extends Component {
             datas: [
 
             ],
-            loading: false,
+            loading: true,
         }
     }
 
@@ -34,13 +34,18 @@ export default class Favourites extends Component {
     }
 
     getFavourites = () => {
-        DataCenter.getFavourites(this._notify);
+        this.setState({
+            loading: true
+        }, () => {
+            DataCenter.getFavourites(this._notify);
+        });
     }
 
     _notify = (results) => {
-        if (results) {
-            this.setState({ datas: results });
-        }
+        this.setState({
+            loading: false,
+            datas: results,
+        });
     }
 
     getImage = (favourite) => {
@@ -73,7 +78,6 @@ export default class Favourites extends Component {
         },
             (buttonIndex) => {
                 if (buttonIndex === 1) {
-                    this.setState({ loading: true });
                     var images = [];
                     for (var index = 0; index < item['images'].length; index++) {
                         var imageInfo = item['images'][index];
@@ -92,7 +96,7 @@ export default class Favourites extends Component {
                         this.props.navigation.navigate(
                             'EditContent',
                             {
-                                goodsID: item['id'],
+                                goodsID: item['goodsID'],
                                 title: item['title'],
                                 price: item['price'],
                                 description: item['text'],
@@ -110,24 +114,19 @@ export default class Favourites extends Component {
     }
 
     render() {
-        let top = Constants.screenHeight() / 2;
-        let left = Constants.screenWidth() / 2;
         return (
-            <View>
+            <View style={{ flex: 1 }}>
+            <ActivityIndicator style={{ position: "absolute", top: 20, left: Constants.screenWidth() / 2 - 20, width: 40, height: 40 }}
+                    size="large"
+                    color={Constants.global.mehoBlue}
+                    hidesWhenStopped={true}
+                    animating={this.state.loading}
+                />
                 <FlatList style={style.flatList}
                     data={this.state.datas}
                     renderItem={this.renderTemplateItem.bind(this)}
                     ItemSeparatorComponent={() => <View style={style.itemSeparator} />}
                     ListFooterComponent={() => <View style={style.footerView} />}
-                />
-                <ActivityIndicator
-                    posation="absolute"
-                    top={top}
-                    left={left}
-                    size="large"
-                    color="#0000ff"
-                    hidesWhenStopped={true}
-                    animating={this.state.loading}
                 />
             </View>
         )
@@ -166,7 +165,7 @@ const style = StyleSheet.create({
     flatList: {
         paddingLeft: 10,
         paddingRight: 10,
-        paddingTop: 20,
+        paddingTop: 15,
     },
     container: {
         backgroundColor: Constants.global.mehoWhite,
