@@ -40,8 +40,6 @@
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		6188A9C66554443BBA22F5AD /* libRNShareLocal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0AA4EE4E7FB4D56B52869CA /* libRNShareLocal.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		8E0076572095C4A800A3C549 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E0076562095C4A800A3C549 /* StoreKit.framework */; };
-		8E0076592095C4B100A3C549 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E0076582095C4B100A3C549 /* GameKit.framework */; };
 		8E242B1B2092F02E009C4E2D /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E242AF12092F02E009C4E2D /* Social.framework */; };
 		8E4D5676208F0FEE00B10B5F /* ImageDrawer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E4D5675208F0FEE00B10B5F /* ImageDrawer.m */; };
 		8E4D56DC208F12E400B10B5F /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E4D569F208F12E400B10B5F /* UIImage+WebP.m */; };
@@ -76,6 +74,8 @@
 		8E4D57382092B58600B10B5F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E4D57372092B58600B10B5F /* SystemConfiguration.framework */; };
 		8E4D573A2092B58D00B10B5F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E4D57392092B58D00B10B5F /* CoreTelephony.framework */; };
 		8E4D573C2092B59600B10B5F /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E4D573B2092B59500B10B5F /* libsqlite3.0.tbd */; };
+		8E4D7EB72095C7C400487EA7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E4D7EB62095C7C400487EA7 /* StoreKit.framework */; };
+		8E4D7EB92095C91D00487EA7 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E4D7EB82095C91D00487EA7 /* GameKit.framework */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B4E01578DAF247AA914B2190 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB62F6E15A444C4A9A92C564 /* libz.tbd */; };
 		CC2272859D9A4D7D804DB3BC /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 968CC5FE8E7E4478865071D8 /* libRealmReact.a */; };
@@ -417,8 +417,6 @@
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		8E0076562095C4A800A3C549 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		8E0076582095C4B100A3C549 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		8E242AF12092F02E009C4E2D /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		8E4D5674208F0FEE00B10B5F /* ImageDrawer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageDrawer.h; sourceTree = "<group>"; };
 		8E4D5675208F0FEE00B10B5F /* ImageDrawer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageDrawer.m; sourceTree = "<group>"; };
@@ -484,6 +482,8 @@
 		8E4D57372092B58600B10B5F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		8E4D57392092B58D00B10B5F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		8E4D573B2092B59500B10B5F /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		8E4D7EB62095C7C400487EA7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		8E4D7EB82095C91D00487EA7 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		968CC5FE8E7E4478865071D8 /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
 		AB3C8040CE4047E6A4685F43 /* libRCTWeChat.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTWeChat.a; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
@@ -508,7 +508,6 @@
 				8E242B1B2092F02E009C4E2D /* Social.framework in Frameworks */,
 				B4E01578DAF247AA914B2190 /* libz.tbd in Frameworks */,
 				1A8918D9FED34175A63AD854 /* libc++.tbd in Frameworks */,
-				8E0076572095C4A800A3C549 /* StoreKit.framework in Frameworks */,
 				8E4D573C2092B59600B10B5F /* libsqlite3.0.tbd in Frameworks */,
 				8E4D573A2092B58D00B10B5F /* CoreTelephony.framework in Frameworks */,
 				8E4D57382092B58600B10B5F /* SystemConfiguration.framework in Frameworks */,
@@ -522,6 +521,7 @@
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
+				8E4D7EB72095C7C400487EA7 /* StoreKit.framework in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
@@ -529,7 +529,7 @@
 				F36F2143E52A4794A5D11E85 /* libRCTWeChat.a in Frameworks */,
 				181061775A9945508EC653C3 /* RCTWeChatTests.xctest in Frameworks */,
 				6188A9C66554443BBA22F5AD /* libRNShareLocal.a in Frameworks */,
-				8E0076592095C4B100A3C549 /* GameKit.framework in Frameworks */,
+				8E4D7EB92095C91D00487EA7 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -681,8 +681,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8E0076582095C4B100A3C549 /* GameKit.framework */,
-				8E0076562095C4A800A3C549 /* StoreKit.framework */,
+				8E4D7EB82095C91D00487EA7 /* GameKit.framework */,
+				8E4D7EB62095C7C400487EA7 /* StoreKit.framework */,
 				8E242AF12092F02E009C4E2D /* Social.framework */,
 				8E4D573B2092B59500B10B5F /* libsqlite3.0.tbd */,
 				8E4D57392092B58D00B10B5F /* CoreTelephony.framework */,
@@ -975,7 +975,7 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = XQ8P3LH38Z;
+						DevelopmentTeam = DQN785PSTN;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
@@ -1536,7 +1536,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = XQ8P3LH38Z;
+				DEVELOPMENT_TEAM = DQN785PSTN;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1573,7 +1573,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = XQ8P3LH38Z;
+				DEVELOPMENT_TEAM = DQN785PSTN;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/realm/src/**",

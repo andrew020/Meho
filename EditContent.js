@@ -200,7 +200,7 @@ export default class EditContent extends Component {
                                             this.selectItem(item.item);
                                         }}>
                                         <Image style={style.checkImage}
-                                            backgroundColor={(item.item['selected'] ? 'red' : 'grey')}
+                                            source={item.item['selected'] ? require('./img/选址框_选中.png') : require('./img/选址框.png')}
                                         />
                                     </TouchableOpacity>
                                 </View>
