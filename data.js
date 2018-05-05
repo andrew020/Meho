@@ -327,7 +327,9 @@ function getGoodsList(pageIndex, pageSize, callback) {
                 callback(null, error)
             });
     });
+}
 
+function getTextTemplate(pageIndex, pageSize, callback) {
     let formData = new FormData();
     formData.append('port', 8081);
     formData.append('page', pageIndex);
