@@ -35,6 +35,7 @@ export default class EditContent extends Component {
             //     selected: true,
             // },
         }
+        this.goodsCodeUrl = null
     }
 
     static navigationOptions = {
@@ -62,6 +63,12 @@ export default class EditContent extends Component {
         });
     }
 
+    onSelectTextTemplate = data => {
+        this.setState({
+            description: data
+        });
+    }
+
     onSelectImageTemplate = data => {
         var imageTemplate = data.data;
         var newDatas = [];
@@ -73,7 +80,9 @@ export default class EditContent extends Component {
                 indexs.push(index);
             }
         }
-        NativeModules.ImageDrawer.drawGoods(newDatas, this.state.title, this.state.price, imageTemplate, (error, newGoodsInfo) => {
+
+
+        var callback = (error, newGoodsInfo) => {
             var copyDatas = this.state.datas;
             for (var index = 0; index < newGoodsInfo.length; index++) {
                 var item = newGoodsInfo[index];
@@ -85,7 +94,22 @@ export default class EditContent extends Component {
                 datas: copyDatas,
                 imageTemplate: imageTemplate,
             });
-        });
+        }
+
+        if (!this.goodsCodeUrl) {
+            DataCenter.createGoodsCode(this.state.goodsID, (data, error) => {
+                if (!data) {
+                    Alert.alert("编辑", "未能获取商品二维码");
+                }
+                else {
+                    this.goodsCodeUrl = data;
+                }
+                NativeModules.ImageDrawer.drawGoods(newDatas, this.state.title, this.state.price, imageTemplate, this.goodsCodeUrl, callback);
+            });
+        }
+        else {
+            NativeModules.ImageDrawer.drawGoods(newDatas, this.state.title, this.state.price, imageTemplate, this.goodsCodeUrl, callback);
+        }
     };
 
     getImageData = (item, index) => {
@@ -200,6 +224,14 @@ export default class EditContent extends Component {
         }
     }
 
+    _goToTextTemplate = () => {
+        this.props.navigation.navigate('TextTemplate',
+            {
+                select: this.onSelectTextTemplate,
+            }
+        )
+    }
+
     render() {
         return (
             <View style={style.rootView}>
@@ -239,9 +271,7 @@ export default class EditContent extends Component {
                         <View style={style.titleView}>
                             <Text style={style.titleText}>分享文案</Text>
                             <TouchableOpacity
-                                onPress={() =>
-                                    this.props.navigation.navigate('TextTemplate')
-                                }>
+                                onPress={this._goToTextTemplate}>
                                 <Text style={style.templateText}>文案模版</Text>
                             </TouchableOpacity>
                         </View>

@@ -29,20 +29,21 @@ RCT_EXPORT_METHOD(
                   title:(NSString *)title
                   price:(NSString *)price
                   templateInfo:(NSDictionary *)templateInfo
+                  QRCodeURL:(NSString *)QRCodeURL
                   response:(RCTResponseSenderBlock)response
                   )
 {
   NSMutableArray *newGoodsInfo = [imagesInfo mutableCopy];
   for (NSInteger index = 0; index < imagesInfo.count; index++) {
     NSMutableDictionary *item = [imagesInfo[index] mutableCopy];
-    NSString *imageBase64 = [self getImageBase64FromBaseImage:item[@"imageString"] title:title price:price templateInfo:templateInfo];
+    NSString *imageBase64 = [self getImageBase64FromBaseImage:item[@"imageString"] QRCodeURL:QRCodeURL title:title price:price templateInfo:templateInfo];
     [item setObject:[NSString stringWithFormat:@"data:image/png;base64,%@", imageBase64] forKey:@"imageBase64"];
     [newGoodsInfo setObject:item atIndexedSubscript:index];
   }
   response(@[[NSNull null], newGoodsInfo]);
 }
 
-- (NSString *)getImageBase64FromBaseImage:(NSString *)goodsImageString title:(NSString *)title price:(NSString *)price templateInfo:(NSDictionary *)templateInfo {
+- (NSString *)getImageBase64FromBaseImage:(NSString *)goodsImageString QRCodeURL:(NSString *)QRCodeURLString title:(NSString *)title price:(NSString *)price templateInfo:(NSDictionary *)templateInfo {
   //     "id": "1",
   //     "template_name": "tmp_001",
   //     "background_color": "",
@@ -71,6 +72,7 @@ RCT_EXPORT_METHOD(
   __block UIImage *goodsImage = nil;
   __block UIImage *backgroundImage = nil;
   __block UIImage *tagImage = nil;
+  __block UIImage *QRCodeImage = nil;
   
   NSString *backgroundInfo = templateInfo[@"background_image_xy"];
   NSArray *backgroundPoints = [backgroundInfo componentsSeparatedByString:@","];
@@ -113,6 +115,19 @@ RCT_EXPORT_METHOD(
     });
   }
   
+  NSURL *QRCodeURL = QRCodeURLString ? [[NSURL alloc] initWithString:QRCodeURLString] : nil;
+  NSString *codeInfo = templateInfo[@"code_xy"];
+  NSArray *codePoints = [codeInfo componentsSeparatedByString:@","];
+  if (QRCodeURL) {
+    dispatch_group_enter(group);
+    dispatch_async(queue, ^{
+      [SDWebImageDownloader.sharedDownloader downloadImageWithURL:QRCodeURL options:SDWebImageDownloaderUseNSURLCache progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+        QRCodeImage = image;
+        dispatch_group_leave(group);
+      }];
+    });
+  }
+  
   dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, 120 * NSEC_PER_SEC));
   
   UIGraphicsBeginImageContext(
@@ -132,6 +147,10 @@ RCT_EXPORT_METHOD(
   if (tagImage) {
     CGRect rect = CGRectMake([tagImagePoints[0] floatValue], [tagImagePoints[1] floatValue], [tagImagePoints[2] floatValue], [tagImagePoints[3] floatValue]);
     [tagImage drawInRect:rect];
+  }
+  if (QRCodeImage) {
+    CGRect rect = CGRectMake([codePoints[0] floatValue], [codePoints[1] floatValue], [codePoints[2] floatValue], [codePoints[3] floatValue]);
+    [QRCodeImage drawInRect:rect];
   }
   
   if (title) {
