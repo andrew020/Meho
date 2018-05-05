@@ -328,6 +328,70 @@ function getGoodsList(pageIndex, pageSize, callback) {
             });
     });
 
+    let formData = new FormData();
+    formData.append('port', 8081);
+    formData.append('page', pageIndex);
+    formData.append('page_size', pageSize);
+    fetch('http://demo1.hixiaoqi.cn/InfMobileApi/get_content_list', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+            Host: 'demo1.hixiaoqi.cn'
+        },
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            if (1 === result['code']) {
+                var data = result['data']['content'];
+                var filter = [];
+                for (var index = 0; index < data.length; index++) {
+                    var itemInfo = data[index];
+                    var item = itemInfo.content ? itemInfo.content : "";
+                    filter.push(item);
+                }
+                callback(filter, null);
+            }
+            else {
+                callback(null, result['msg'])
+            }
+        })
+        .catch((error) => {
+            console.warn(error);
+            callback(null, error)
+        });
+}
+
+function createGoodsCode(goodsID, callback) {
+    let formData = new FormData();
+    formData.append('port', 8081);
+    formData.append('goods_id', goodsID);
+    fetch('http://demo1.hixiaoqi.cn/InfSetShopApi/create_goods_code', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+            Host: 'demo1.hixiaoqi.cn'
+        },
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            if (1 === result['code']) {
+                var data = result['data']['url'];
+                callback(data, null);
+            }
+            else {
+                callback(null, result['msg'])
+            }
+        })
+        .catch((error) => {
+            console.warn(error);
+            callback(null, error)
+        });
 }
 
 export default {
@@ -339,4 +403,6 @@ export default {
     getGoodsList: getGoodsList.bind(),
     deleteFavourite: deleteFavourite.bind(),
     getTemplateDetail: getTemplateDetail.bind(),
+    getTextTemplate: getTextTemplate.bind(),
+    createGoodsCode: createGoodsCode.bind(),
 };
