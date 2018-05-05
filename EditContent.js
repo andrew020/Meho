@@ -190,7 +190,13 @@ export default class EditContent extends Component {
             );
         }
         else {
-            this.props.navigation.navigate('ImageTemplate', { select: this.onSelectImageTemplate })
+            this.props.navigation.navigate('ImageTemplate',
+                {
+                    select: this.onSelectImageTemplate,
+                    text: this.state.description,
+                    price: this.state.price,
+                }
+            )
         }
     }
 

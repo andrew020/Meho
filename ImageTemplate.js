@@ -16,7 +16,9 @@ export default class ImageTemplate extends Component {
 
     constructor(props) {
         super(props)
-        this.state = { list: [] }
+        this.state = { 
+            list: [],
+         }
     }
 
     componentWillMount() {
@@ -64,6 +66,9 @@ export default class ImageTemplate extends Component {
     };
 
     renderTemplateItem = ({ item }) => {
+        const { params } = this.props.navigation.state;
+        const text = params ? params.text : null;
+        const price = params ? params.price : null;
         return (<TouchableOpacity onPress={() => this._onPressItem(item)}>
             <View style={styles.flatItem}>
                 <Image style={styles.image}
@@ -75,10 +80,10 @@ export default class ImageTemplate extends Component {
                 <View style={styles.summaryContainer}>
                     <View style={styles.labelContainer}>
                         <Text style={styles.label}>
-                            全棉贡缎四件套
+                            {text}
                         </Text>
                         <Text style={styles.priceLabel}>
-                            抢购价 ¥459
+                            {"抢购价 ¥" + price}
                         </Text>
                     </View>
                     <Image style={styles.icon}
