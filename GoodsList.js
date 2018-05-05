@@ -28,13 +28,6 @@ export default class GoodsList extends Component {
         header: null,
     };
 
-    componentWillMount() {
-        this._itemGestureHandlers = {
-            onStartShouldSetResponderCapture: () => true,
-            onMoveShouldSetResponderCapture: () => true,
-        };
-    }
-
     componentDidMount() {
         wechat.registerApp('wx1f5bd712a4439fef');
 
@@ -44,7 +37,7 @@ export default class GoodsList extends Component {
     _getUser = () => {
         DataCenter.checkUser((id, name, label, avatar) => {
             if (!id) {
-                this.props.navigation.navigate('LoginPage',  { doLogin: this._getUser });
+                this.props.navigation.navigate('LoginPage', { doLogin: this._getUser });
             }
             else {
                 this.setState({
@@ -75,10 +68,14 @@ export default class GoodsList extends Component {
                 }
 
                 if (msg && msg.length) {
-                    Alert(
-                        "商品",
-                        msg,
-                    );
+                    this.setState({
+                        isFetching: false,
+                    }, () => {
+                        Alert.alert(
+                            "商品",
+                            msg,
+                        );
+                    });
                 }
             });
         });

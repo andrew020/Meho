@@ -64,11 +64,25 @@ export default class EditContent extends Component {
 
     onSelectImageTemplate = data => {
         var imageTemplate = data.data;
-        var newDatas = this.state.datas;
-        NativeModules.ImageDrawer.drawGoods(this.state.datas, this.state.title, this.state.price, imageTemplate, (error, newGoodsInfo) => {
-            console.log(newGoodsInfo);
+        var newDatas = [];
+        var indexs = [];
+        for (var index = 0; index < this.state.datas.length; index++) {
+            var item = this.state.datas[index];
+            if (item.selected === true) {
+                newDatas.push(item);
+                indexs.push(index);
+            }
+        }
+        NativeModules.ImageDrawer.drawGoods(newDatas, this.state.title, this.state.price, imageTemplate, (error, newGoodsInfo) => {
+            var copyDatas = this.state.datas;
+            for (var index = 0; index < newGoodsInfo.length; index++) {
+                var item = newGoodsInfo[index];
+                var originalIndex = indexs[index];
+                copyDatas[originalIndex] = item;
+            }
+
             this.setState({
-                datas: newGoodsInfo,
+                datas: copyDatas,
                 imageTemplate: imageTemplate,
             });
         });
@@ -83,18 +97,15 @@ export default class EditContent extends Component {
         }
     }
 
-    selectItem = (item) => {
+    selectItem = (item, index) => {
         var newDatas = this.state.datas;
-        for (var index = 0; index < this.state.datas.length; index++) {
-            var excited = this.state.datas[index];
-            if (item['key'] === excited['key']) {
-                item['selected'] = !excited['selected']
-                newDatas[index] = item;
-                this.setState({
-                    datas: newDatas,
-                });
-                break;
-            }
+        var excited = this.state.datas[index];
+        if (item['key'] === excited['key']) {
+            item['selected'] = !excited['selected']
+            newDatas[index] = item;
+            this.setState({
+                datas: newDatas,
+            });
         }
     }
 
@@ -103,10 +114,8 @@ export default class EditContent extends Component {
         var datas = this.state.datas;
         for (var index = 0; index < datas.length; index++) {
             var item = datas[index];
-            if (item['selected'] === true) {
-                var imageString = item['imageBase64'] ? item['imageBase64'] : item['imageString'];
-                images.push(imageString);
-            }
+            var imageString = item['imageBase64'] ? item['imageBase64'] : item['imageString'];
+            images.push(imageString);
         }
 
         DataCenter.addFavourite(
@@ -172,6 +181,19 @@ export default class EditContent extends Component {
         sharePictures(option);
     }
 
+    _goToImageTemplate = () => {
+        const result = this.state.datas.filter((item) => item.selected === true);
+        if (result.length === 0) {
+            Alert.alert(
+                "编辑",
+                "未选择图片",
+            );
+        }
+        else {
+            this.props.navigation.navigate('ImageTemplate', { select: this.onSelectImageTemplate })
+        }
+    }
+
     render() {
         return (
             <View style={style.rootView}>
@@ -180,24 +202,24 @@ export default class EditContent extends Component {
                         <View style={style.titleView}>
                             <Text style={style.titleText}>图片选择</Text>
                             <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate('ImageTemplate', { select: this.onSelectImageTemplate })}>
+                                onPress={this._goToImageTemplate}>
                                 <Text style={style.templateText}>图片模版</Text>
                             </TouchableOpacity>
                         </View>
                         <FlatList style={style.flatList}
                             horizontal={true}
                             data={this.state.datas}
-                            renderItem={(item, index) =>
+                            renderItem={(item) =>
                                 <View height={(Constants.screenWidth() - 40) / 3.0}
                                     width={(Constants.screenWidth() - 40) / 3.0}
                                 >
                                     <Image style={style.itemImage}
-                                        source={this.getImageData(item.item, index)}
+                                        source={this.getImageData(item.item, item.index)}
                                         resizeMode='contain'
                                     />
                                     <TouchableOpacity style={style.checkButton}
                                         onPress={() => {
-                                            this.selectItem(item.item);
+                                            this.selectItem(item.item, item.index);
                                         }}>
                                         <Image style={style.checkImage}
                                             source={item.item['selected'] ? require('./img/选址框_选中.png') : require('./img/选址框.png')}
