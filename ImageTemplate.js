@@ -79,10 +79,10 @@ export default class ImageTemplate extends Component {
                 />
                 <View style={styles.summaryContainer}>
                     <View style={styles.labelContainer}>
-                        <Text style={styles.label}>
+                        <Text style={styles.label} numberOfLines={1}>
                             {text}
                         </Text>
-                        <Text style={styles.priceLabel}>
+                        <Text style={styles.priceLabel} numberOfLines={1}>
                             {"抢购价 ¥" + price}
                         </Text>
                     </View>
@@ -91,6 +91,7 @@ export default class ImageTemplate extends Component {
                             uri: item['tag_image'],
                             cache: "force-cache",
                         }}
+                        resizeMode="contain"
                     />
                 </View>
             </View>
@@ -143,6 +144,7 @@ const styles = StyleSheet.create({
     icon: {
         width: 40,
         height: 40,
-        backgroundColor: Constants.global.mehoGrey,
+        //backgroundColor: Constants.global.mehoGrey,
+        marginLeft: 5,
     }
 })
