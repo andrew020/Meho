@@ -8,6 +8,7 @@ import {
 } from 'react-native-share-local'
 import Constants from "./Constants";
 import DataCenter from './data';
+import { CachedImage } from "react-native-img-cache";
 
 export default class Favourites extends Component {
 
@@ -137,12 +138,8 @@ export default class Favourites extends Component {
             <View style={style.container}>
                 <FlatList horizontal={true}
                     data={item['images']}
-                    renderItem={(imageItem) => <Image
-                        style={style.itemImage}
-                        source={{ uri: imageItem.item, cache: "force-cache" }}
-                        height={(Constants.screenWidth() - 73) / 4}
-                        width={(Constants.screenWidth() - 73) / 4}
-                    />
+                    renderItem={(imageItem) =>
+                        this.renderImage(imageItem.item)
                     }
                     ItemSeparatorComponent={() => <View style={style.imageItemSeparator} />}
                 />
@@ -159,6 +156,25 @@ export default class Favourites extends Component {
             </View>
         )
     };
+
+    renderImage = (item) => {
+        if (item.startsWith('data:')) {
+            return <Image style={style.itemImage}
+                source={{ uri: item }}
+                height={(Constants.screenWidth() - 73) / 4}
+                width={(Constants.screenWidth() - 73) / 4}
+                resizeMode="contain"
+            />
+        }
+        else {
+            return <CachedImage style={style.itemImage}
+                source={{ uri: item }}
+                height={(Constants.screenWidth() - 73) / 4}
+                width={(Constants.screenWidth() - 73) / 4}
+                resizeMode="contain"
+            />
+        }
+    }
 }
 
 const style = StyleSheet.create({

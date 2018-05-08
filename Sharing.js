@@ -21,6 +21,7 @@ import {
     shareLink,
     sharePictures
 } from 'react-native-share-local'
+import { CachedImage } from "react-native-img-cache";
 
 export default class Sharing extends Component {
 
@@ -85,13 +86,24 @@ export default class Sharing extends Component {
                     numColumns={4}
                     data={this.state.images}
                     renderItem={(item) =>
-                        <Image style={styles.image}
-                            source={{ uri: item.item, cache: 'force-cache' }}
-                        />
+                        this.renderImage(item.item)
                     }
                 />
             </View>
         );
+    }
+
+    renderImage = (item) => {
+        if (item.startsWith('data:')) {
+            return <Image style={styles.image}
+                source={{ uri: item }}
+            />
+        }
+        else {
+            return <CachedImage style={styles.image}
+                source={{ uri: item }}
+            />
+        }
     }
 }
 
@@ -114,6 +126,6 @@ const styles = StyleSheet.create({
         margin: 5,
         width: (Dimensions.get('window').width - 60) / 4,
         height: (Dimensions.get('window').width - 60) / 4,
-        backgroundColor: mehoGrey,
+        resizeMode: "contain"
     }
 })

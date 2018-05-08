@@ -10,6 +10,7 @@ import {
     shareLink,
     sharePictures
 } from 'react-native-share-local'
+import { CachedImage } from "react-native-img-cache";
 
 export default class EditContent extends Component {
 
@@ -117,7 +118,7 @@ export default class EditContent extends Component {
             return { uri: item.imageBase64 };
         }
         else {
-            return { uri: item.imageString, cache: "force-cache", };
+            return { uri: item.imageString };
         }
     }
 
@@ -232,6 +233,21 @@ export default class EditContent extends Component {
         )
     }
 
+    _ItemImage = (item) => {
+        if (item.item.imageBase64) {
+            return <Image style={style.itemImage}
+                source={this.getImageData(item.item, item.index)}
+                resizeMode='contain'
+            />
+        }
+        else {
+            return <CachedImage style={style.itemImage}
+                source={this.getImageData(item.item, item.index)}
+                resizeMode='contain'
+            />
+        }
+    }
+
     render() {
         return (
             <View style={style.rootView}>
@@ -251,10 +267,7 @@ export default class EditContent extends Component {
                                 <View height={(Constants.screenWidth() - 40) / 3.0}
                                     width={(Constants.screenWidth() - 40) / 3.0}
                                 >
-                                    <Image style={style.itemImage}
-                                        source={this.getImageData(item.item, item.index)}
-                                        resizeMode='contain'
-                                    />
+                                    {this._ItemImage(item)}
                                     <TouchableOpacity style={style.checkButton}
                                         onPress={() => {
                                             this.selectItem(item.item, item.index);

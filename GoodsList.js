@@ -3,9 +3,8 @@ import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, Alert, Touch
 import DataCenter from './data';
 import constants from "./Constants";
 import * as wechat from 'react-native-wechat'
-import {
-    sharePictures
-} from 'react-native-share-local'
+import { sharePictures } from 'react-native-share-local'
+import { CachedImage } from "react-native-img-cache";
 
 export default class GoodsList extends Component {
 
@@ -151,7 +150,7 @@ export default class GoodsList extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
-                    <Image style={styles.headerImage} source={
+                    <CachedImage style={styles.headerImage} source={
                         this.state.userAvatar ? { uri: this.state.userAvatar } : require('./img/LOGO.png')
                     }
                     />
@@ -191,14 +190,10 @@ export default class GoodsList extends Component {
                         data={item['images']}
                         renderItem={(imageItem) =>
                             <TouchableWithoutFeedback>
-                                <Image
+                                <CachedImage
                                     style={goodsStyle.itemImage}
                                     source={{
-                                        uri: imageItem.item,
-                                        headers: {
-                                            'Cache-control': 'public',
-                                        },
-                                        cache: 'force-cache',
+                                        uri: imageItem.item
                                     }}
                                     height={(constants.screenWidth() - 73) / 4}
                                     width={(constants.screenWidth() - 73) / 4}

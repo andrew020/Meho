@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import DataCenter from './data';
+import { CachedImage } from "react-native-img-cache";
 
 export default class ImageTemplate extends Component {
 
@@ -71,11 +72,11 @@ export default class ImageTemplate extends Component {
         const price = params ? params.price : null;
         return (<TouchableOpacity onPress={() => this._onPressItem(item)}>
             <View style={styles.flatItem}>
-                <Image style={styles.image}
+                <CachedImage style={styles.image}
                     source={{
-                        uri: item['background_image'],
-                        cache: "force-cache",
+                        uri: item['background_image']
                     }}
+                    resizeMode="contain"
                 />
                 <View style={styles.summaryContainer}>
                     <View style={styles.labelContainer}>
@@ -86,10 +87,9 @@ export default class ImageTemplate extends Component {
                             {"抢购价 ¥" + price}
                         </Text>
                     </View>
-                    <Image style={styles.icon}
+                    <CachedImage style={styles.icon}
                         source={{
-                            uri: item['tag_image'],
-                            cache: "force-cache",
+                            uri: item['tag_image']
                         }}
                         resizeMode="contain"
                     />
