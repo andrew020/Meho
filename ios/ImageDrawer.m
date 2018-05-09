@@ -75,6 +75,7 @@ RCT_EXPORT_METHOD(
   __block UIImage *tagImage = nil;
   __block UIImage *QRCodeImage = nil;
   __block UIImage *avatarImage = nil;
+  CGFloat scale = 1;
   
   NSString *backgroundInfo = templateInfo[@"background_image_xy"];
   NSArray *backgroundPoints = [backgroundInfo componentsSeparatedByString:@","];
@@ -155,30 +156,33 @@ RCT_EXPORT_METHOD(
     UIGraphicsEndImageContext();
   }
   
+  if (backgroundImage) {
+    scale = backgroundImage.size.width / [backgroundPoints[2] floatValue];
+  }
   UIGraphicsBeginImageContext(
                               CGSizeMake(
-                                         [backgroundPoints[0] floatValue] + [backgroundPoints[2] floatValue],
-                                         [backgroundPoints[1] floatValue] + [backgroundPoints[3] floatValue]
+                                         [backgroundPoints[0] floatValue] * scale + [backgroundPoints[2] floatValue] * scale ,
+                                         [backgroundPoints[1] floatValue] * scale  + [backgroundPoints[3] floatValue] * scale 
                                          )
                               );
   if (backgroundImage) {
-    CGRect rect = CGRectMake([backgroundPoints[0] floatValue], [backgroundPoints[1] floatValue], [backgroundPoints[2] floatValue], [backgroundPoints[3] floatValue]);
+    CGRect rect = CGRectMake([backgroundPoints[0] floatValue] * scale , [backgroundPoints[1] floatValue] * scale , [backgroundPoints[2] floatValue] * scale , [backgroundPoints[3] floatValue] * scale );
     [backgroundImage drawInRect:rect];
   }
   if (goodsImage) {
-    CGRect rect = CGRectMake([imagePoints[0] floatValue], [imagePoints[1] floatValue], [imagePoints[2] floatValue], [imagePoints[3] floatValue]);
+    CGRect rect = CGRectMake([imagePoints[0] floatValue] * scale , [imagePoints[1] floatValue] * scale , [imagePoints[2] floatValue] * scale , [imagePoints[3] floatValue] * scale );
     [goodsImage drawInRect:rect];
   }
   if (tagImage) {
-    CGRect rect = CGRectMake([tagImagePoints[0] floatValue], [tagImagePoints[1] floatValue], [tagImagePoints[2] floatValue], [tagImagePoints[3] floatValue]);
+    CGRect rect = CGRectMake([tagImagePoints[0] floatValue] * scale , [tagImagePoints[1] floatValue] * scale , [tagImagePoints[2] floatValue] * scale , [tagImagePoints[3] floatValue] * scale );
     [tagImage drawInRect:rect];
   }
   if (QRCodeImage) {
-    CGRect rect = CGRectMake([codePoints[0] floatValue], [codePoints[1] floatValue], [codePoints[2] floatValue], [codePoints[3] floatValue]);
+    CGRect rect = CGRectMake([codePoints[0] floatValue] * scale , [codePoints[1] floatValue] * scale , [codePoints[2] floatValue] * scale , [codePoints[3] floatValue] * scale );
     [QRCodeImage drawInRect:rect];
   }
   if (avatarImage) {
-    CGRect rect = CGRectMake([codePoints[0] floatValue] + 17.5, [codePoints[1] floatValue]  + 17.5, [codePoints[2] floatValue] - 35, [codePoints[3] floatValue] - 35);
+    CGRect rect = CGRectMake(([codePoints[0] floatValue] + 17.5) * scale , ([codePoints[1] floatValue]  + 17.5) * scale , ([codePoints[2] floatValue] - 35) * scale , ([codePoints[3] floatValue] - 35) * scale );
     [avatarImage drawInRect:rect];
   }
   
@@ -191,9 +195,9 @@ RCT_EXPORT_METHOD(
     
     NSDictionary *attri = @{
                             NSForegroundColorAttributeName: [ImageDrawer colorFromHexString:goods_title_color],
-                            NSFontAttributeName: [UIFont systemFontOfSize:[goods_title_fontSize floatValue]],
+                            NSFontAttributeName: [UIFont systemFontOfSize:[goods_title_fontSize floatValue] * scale ],
                             };
-    CGFloat x = [goods_title_points[0] floatValue];
+    CGFloat x = [goods_title_points[0] floatValue] * scale ;
     CGSize size = [title sizeWithAttributes:attri];
     if ([goods_title_align isEqualToString:@"right"]) {
       x -= size.width;
@@ -201,7 +205,7 @@ RCT_EXPORT_METHOD(
     else if ([goods_title_align isEqualToString:@"center"]) {
       x -= size.width / 2;
     }
-    [title drawAtPoint:CGPointMake(x, [goods_title_points[1] floatValue] - size.height)
+    [title drawAtPoint:CGPointMake(x, [goods_title_points[1] floatValue] * scale  - size.height)
         withAttributes:attri];
   }
   
@@ -214,10 +218,10 @@ RCT_EXPORT_METHOD(
     
     NSDictionary *attri = @{
                             NSForegroundColorAttributeName: [ImageDrawer colorFromHexString:goods_price_color],
-                            NSFontAttributeName: [UIFont systemFontOfSize:[goods_price_fontSize floatValue]],
+                            NSFontAttributeName: [UIFont systemFontOfSize:[goods_price_fontSize floatValue] * scale ],
                             };
     
-    CGFloat x = [goods_price_points[0] floatValue];
+    CGFloat x = [goods_price_points[0] floatValue] * scale ;
     CGSize size = [price sizeWithAttributes:attri];
     if ([goods_price_align isEqualToString:@"right"]) {
       x -= size.width;
@@ -225,7 +229,7 @@ RCT_EXPORT_METHOD(
     else if ([goods_price_align isEqualToString:@"center"]) {
       x -= size.width / 2;
     }
-    [price drawAtPoint:CGPointMake(x, [goods_price_points[1] floatValue] - size.height)
+    [price drawAtPoint:CGPointMake(x, [goods_price_points[1] floatValue] * scale  - size.height)
         withAttributes:attri];
   }
   

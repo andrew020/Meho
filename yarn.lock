@@ -5014,6 +5014,10 @@ rimraf@~2.2.6:
   version "2.2.8"
   resolved "http://registry.npm.taobao.org/rimraf/download/rimraf-2.2.8.tgz#e439be2aaee327321952730f99a8929e4fc50582"
 
+rn-loading-view@^1.1.1:
+  version "1.1.1"
+  resolved "http://registry.npm.taobao.org/rn-loading-view/download/rn-loading-view-1.1.1.tgz#9b533c7d7129a6ce2aa2775934800280be13a53b"
+
 run-async@^2.2.0:
   version "2.3.0"
   resolved "http://registry.npm.taobao.org/run-async/download/run-async-2.3.0.tgz#0371ab4ae0bdd720d4166d7dfda64ff7a445a6c0"

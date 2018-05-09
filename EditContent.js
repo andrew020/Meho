@@ -11,12 +11,14 @@ import {
     sharePictures
 } from 'react-native-share-local'
 import { CachedImage } from "react-native-img-cache";
+import LoadingView from 'rn-loading-view';
 
 export default class EditContent extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
+            loading: false,
             goodsID: "",
             title: "",
             price: "",
@@ -71,51 +73,60 @@ export default class EditContent extends Component {
     }
 
     onSelectImageTemplate = data => {
-        var imageTemplate = data.data;
-        var newDatas = [];
-        var indexs = [];
-        for (var index = 0; index < this.state.datas.length; index++) {
-            var item = this.state.datas[index];
-            if (item.selected === true) {
-                newDatas.push(item);
-                indexs.push(index);
-            }
-        }
+
+        this.setState(
+            {
+                loading: true
+            },
+            () => {
+                var imageTemplate = data.data;
+                var newDatas = [];
+                var indexs = [];
+                for (var index = 0; index < this.state.datas.length; index++) {
+                    var item = this.state.datas[index];
+                    if (item.selected === true) {
+                        newDatas.push(item);
+                        indexs.push(index);
+                    }
+                }
 
 
-        var callback = (error, newGoodsInfo) => {
-            var copyDatas = this.state.datas;
-            for (var index = 0; index < newGoodsInfo.length; index++) {
-                var item = newGoodsInfo[index];
-                var originalIndex = indexs[index];
-                copyDatas[originalIndex] = item;
-            }
+                var callback = (error, newGoodsInfo) => {
+                    var copyDatas = this.state.datas;
+                    for (var index = 0; index < newGoodsInfo.length; index++) {
+                        var item = newGoodsInfo[index];
+                        var originalIndex = indexs[index];
+                        copyDatas[originalIndex] = item;
+                    }
 
-            this.setState({
-                datas: copyDatas,
-                imageTemplate: imageTemplate,
-            });
-        }
+                    this.setState({
+                        loading: false,
+                        datas: copyDatas,
+                        imageTemplate: imageTemplate,
+                    });
+                }
 
-        if (!this.goodsCodeUrl) {
-            DataCenter.createGoodsCode(this.state.goodsID, (data, error) => {
-                if (!data) {
-                    Alert.alert("编辑", "未能获取商品二维码");
+                if (!this.goodsCodeUrl) {
+                    DataCenter.createGoodsCode(this.state.goodsID, (data, error) => {
+                        if (!data) {
+                            Alert.alert("编辑", "未能获取商品二维码");
+                        }
+                        else {
+                            this.goodsCodeUrl = data;
+                        }
+
+                        DataCenter.checkUser((id, name, label, avatar) => {
+                            NativeModules.ImageDrawer.drawGoods(newDatas, this.state.title, this.state.price, imageTemplate, this.goodsCodeUrl, avatar, callback);
+                        });
+                    });
                 }
                 else {
-                    this.goodsCodeUrl = data;
+                    DataCenter.checkUser((id, name, label, avatar) => {
+                        NativeModules.ImageDrawer.drawGoods(newDatas, this.state.title, this.state.price, imageTemplate, this.goodsCodeUrl, avatar, callback);
+                    });
                 }
-
-                DataCenter.checkUser((id, name, label, avatar) => {
-                    NativeModules.ImageDrawer.drawGoods(newDatas, this.state.title, this.state.price, imageTemplate, this.goodsCodeUrl, avatar, callback);
-                });
-            });
-        }
-        else {
-            DataCenter.checkUser((id, name, label, avatar) => {
-                NativeModules.ImageDrawer.drawGoods(newDatas, this.state.title, this.state.price, imageTemplate, this.goodsCodeUrl, avatar, callback);
-            });
-        }
+            }
+        );
     };
 
     getImageData = (item, index) => {
@@ -324,9 +335,28 @@ export default class EditContent extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                {this.renderLoading()}
             </View>
         )
     };
+
+    renderLoading() {
+        const spinnerProps = { size: 'large', color: 'rgba(1,1,1,1)' }
+
+        if (this.state.loading) {
+            return <View style={style.loadingView}>
+                <LoadingView
+                    text={'处理中...'}
+                    textProps={{ style: style.loadingText }}
+                    renderButton={false}
+                    spinnerProps={spinnerProps}
+                />
+            </View>
+        }
+        else {
+            return null;
+        }
+    }
 }
 
 const style = StyleSheet.create({
@@ -422,5 +452,17 @@ const style = StyleSheet.create({
     addTemplateButton: {
         position: 'absolute',
         left: 10
-    }
+    },
+    loadingText: {
+        fontSize: Constants.global.mehoMainTextFontSize,
+        color: Constants.global.mehoMainTextColor
+    },
+    loadingView: {
+        position: "absolute",
+        top: 0,
+        right: 0,
+        left: 0,
+        bottom: 0,
+        backgroundColor: '#00000030',
+    },
 })
