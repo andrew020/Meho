@@ -146,6 +146,26 @@ export default class GoodsList extends Component {
         sharePictures(option);
     }
 
+    _quit = () => {
+        DataCenter.clearData(() => {
+            this.setState(
+                {
+                    userName: '',
+                    userLabel: '',
+                    userAvatar: '',
+                    datas: [],
+                    isFetching: false,
+                    pageIndex: 1,
+                    pageSize: 20,
+                },
+                () => {
+                    this.laodingMore = false;
+                    this.props.navigation.navigate('LoginPage', { doLogin: this._getUser });
+                }
+            );
+        });
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -162,6 +182,11 @@ export default class GoodsList extends Component {
                             {this.state.userLabel ? this.state.userLabel : ''}
                         </Text>
                     </View>
+                    <TouchableOpacity style={goodsStyle.quitButton}
+                        onPress={this._quit}
+                    >
+                        <Text style={goodsStyle.quitButtonText}>退出</Text>
+                    </TouchableOpacity>
                 </View>
                 <FlatList style={styles.list}
                     data={this.state.datas}
@@ -265,6 +290,18 @@ const goodsStyle = StyleSheet.create({
         fontSize: constants.global.mehoSecondTextFontSize,
         color: constants.global.mehoWhite,
     },
+    quitButton: {
+        backgroundColor: constants.global.mehoWhite,
+        paddingTop: 7,
+        paddingBottom: 7,
+        paddingLeft: 23,
+        paddingRight: 23,
+        marginRight: 12,
+    },
+    quitButtonText: {
+        fontSize: constants.global.mehoSecondTextFontSize,
+        color: constants.global.mehoBlue,
+    },
 })
 
 const styles = StyleSheet.create({
@@ -290,7 +327,7 @@ const styles = StyleSheet.create({
     },
     nameContainer: {
         marginLeft: 10,
-        flex: 0,
+        flex: 1,
         flexDirection: 'column',
     },
     headerName: {

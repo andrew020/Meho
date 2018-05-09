@@ -30,20 +30,21 @@ RCT_EXPORT_METHOD(
                   price:(NSString *)price
                   templateInfo:(NSDictionary *)templateInfo
                   QRCodeURL:(NSString *)QRCodeURL
+                  avatar:(NSString *)avatar
                   response:(RCTResponseSenderBlock)response
                   )
 {
   NSMutableArray *newGoodsInfo = [imagesInfo mutableCopy];
   for (NSInteger index = 0; index < imagesInfo.count; index++) {
     NSMutableDictionary *item = [imagesInfo[index] mutableCopy];
-    NSString *imageBase64 = [self getImageBase64FromBaseImage:item[@"imageString"] QRCodeURL:QRCodeURL title:title price:price templateInfo:templateInfo];
+    NSString *imageBase64 = [self getImageBase64FromBaseImage:item[@"imageString"] QRCodeURL:QRCodeURL avatar:avatar title:title price:price templateInfo:templateInfo];
     [item setObject:[NSString stringWithFormat:@"data:image/png;base64,%@", imageBase64] forKey:@"imageBase64"];
     [newGoodsInfo setObject:item atIndexedSubscript:index];
   }
   response(@[[NSNull null], newGoodsInfo]);
 }
 
-- (NSString *)getImageBase64FromBaseImage:(NSString *)goodsImageString QRCodeURL:(NSString *)QRCodeURLString title:(NSString *)title price:(NSString *)price templateInfo:(NSDictionary *)templateInfo {
+- (NSString *)getImageBase64FromBaseImage:(NSString *)goodsImageString QRCodeURL:(NSString *)QRCodeURLString avatar:(NSString *)avatar title:(NSString *)title price:(NSString *)price templateInfo:(NSDictionary *)templateInfo {
   //     "id": "1",
   //     "template_name": "tmp_001",
   //     "background_color": "",
@@ -73,6 +74,7 @@ RCT_EXPORT_METHOD(
   __block UIImage *backgroundImage = nil;
   __block UIImage *tagImage = nil;
   __block UIImage *QRCodeImage = nil;
+  __block UIImage *avatarImage = nil;
   
   NSString *backgroundInfo = templateInfo[@"background_image_xy"];
   NSArray *backgroundPoints = [backgroundInfo componentsSeparatedByString:@","];
@@ -128,7 +130,30 @@ RCT_EXPORT_METHOD(
     });
   }
   
+  NSURL *avatarURL = avatar ? [[NSURL alloc] initWithString:avatar] : nil;
+  if (avatarURL) {
+    dispatch_group_enter(group);
+    dispatch_async(queue, ^{
+      [SDWebImageDownloader.sharedDownloader downloadImageWithURL:avatarURL options:SDWebImageDownloaderUseNSURLCache progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+        avatarImage = image;
+        dispatch_group_leave(group);
+      }];
+    });
+  }
+  
   dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, 120 * NSEC_PER_SEC));
+  
+  if (avatarImage) {
+    UIGraphicsBeginImageContext(avatarImage.size);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGRect rect = CGRectMake(0, 0, avatarImage.size.width, avatarImage.size.height);
+    CGPathRef clippath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:avatarImage.size.width / 2].CGPath;
+    CGContextAddPath(ctx, clippath);
+    CGContextClip(ctx);
+    [avatarImage drawInRect:rect];
+    avatarImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+  }
   
   UIGraphicsBeginImageContext(
                               CGSizeMake(
@@ -152,6 +177,10 @@ RCT_EXPORT_METHOD(
     CGRect rect = CGRectMake([codePoints[0] floatValue], [codePoints[1] floatValue], [codePoints[2] floatValue], [codePoints[3] floatValue]);
     [QRCodeImage drawInRect:rect];
   }
+  if (avatarImage) {
+    CGRect rect = CGRectMake([codePoints[0] floatValue] + 17.5, [codePoints[1] floatValue]  + 17.5, [codePoints[2] floatValue] - 35, [codePoints[3] floatValue] - 35);
+    [avatarImage drawInRect:rect];
+  }
   
   if (title) {
     NSString *goods_title_align = templateInfo[@"goods_title_align"];
@@ -165,12 +194,14 @@ RCT_EXPORT_METHOD(
                             NSFontAttributeName: [UIFont systemFontOfSize:[goods_title_fontSize floatValue]],
                             };
     CGFloat x = [goods_title_points[0] floatValue];
-    BOOL left = [goods_title_align isEqualToString:@"left"];
-    if (!left) {
-      CGSize size = [price sizeWithAttributes:attri];
+    CGSize size = [title sizeWithAttributes:attri];
+    if ([goods_title_align isEqualToString:@"right"]) {
       x -= size.width;
     }
-    [title drawAtPoint:CGPointMake(x, [goods_title_points[1] floatValue])
+    else if ([goods_title_align isEqualToString:@"center"]) {
+      x -= size.width / 2;
+    }
+    [title drawAtPoint:CGPointMake(x, [goods_title_points[1] floatValue] - size.height)
         withAttributes:attri];
   }
   
@@ -187,12 +218,14 @@ RCT_EXPORT_METHOD(
                             };
     
     CGFloat x = [goods_price_points[0] floatValue];
-    BOOL left = [goods_price_align isEqualToString:@"left"];
-    if (!left) {
-      CGSize size = [price sizeWithAttributes:attri];
+    CGSize size = [price sizeWithAttributes:attri];
+    if ([goods_price_align isEqualToString:@"right"]) {
       x -= size.width;
     }
-    [price drawAtPoint:CGPointMake(x, [goods_price_points[1] floatValue])
+    else if ([goods_price_align isEqualToString:@"center"]) {
+      x -= size.width / 2;
+    }
+    [price drawAtPoint:CGPointMake(x, [goods_price_points[1] floatValue] - size.height)
         withAttributes:attri];
   }
   
