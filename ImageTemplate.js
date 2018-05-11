@@ -9,6 +9,7 @@ import {
     Alert,
     Dimensions,
     TouchableOpacity,
+    StatusBar
 } from 'react-native';
 import DataCenter from './data';
 import { CachedImage } from "react-native-img-cache";
@@ -17,9 +18,9 @@ export default class ImageTemplate extends Component {
 
     constructor(props) {
         super(props)
-        this.state = { 
+        this.state = {
             list: [],
-         }
+        }
     }
 
     componentWillMount() {
@@ -57,12 +58,15 @@ export default class ImageTemplate extends Component {
 
     render() {
         return (
-            <FlatList style={styles.flatList}
-                numColumns={2}
-                data={this.state.list}
-                renderItem={this.renderTemplateItem.bind(this)}
-                keyExtractor={(item, index) => item['id']}
-            />
+            <View>
+                <StatusBar barStyle='light-content' />
+                <FlatList style={styles.flatList}
+                    numColumns={2}
+                    data={this.state.list}
+                    renderItem={this.renderTemplateItem.bind(this)}
+                    keyExtractor={(item, index) => item['id']}
+                />
+            </View>
         )
     };
 

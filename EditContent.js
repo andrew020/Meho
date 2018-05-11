@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, NativeModules, Alert, ScrollView } from 'react-native';
+import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, NativeModules, Alert, ScrollView, StatusBar } from 'react-native';
 import MCanvas from 'mcanvas';
 import Canvas from 'react-native-canvas';
 import Constants from "./Constants";
@@ -267,6 +267,7 @@ export default class EditContent extends Component {
     render() {
         return (
             <View style={style.rootView}>
+                <StatusBar barStyle='light-content' />
                 <KeyboardAwareScrollView flex={1} keyboardDismissMode={'on-drag'}>
                     <View style={style.container}>
                         <View style={style.titleView}>

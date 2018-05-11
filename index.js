@@ -77,7 +77,45 @@ const Favourites = StackNavigator(
         Favourite: {
             screen: Favourite,
         },
-
+        EditContent: {
+            screen: EditContent,
+            navigationOptions: {
+                tabBarVisible: false,
+            }
+        },
+        ImageTemplate: {
+            screen: ImageTemplate,
+            navigationOptions: {
+                tabBarVisible: false,
+                title: '图片模版',
+                headerStyle: {
+                    backgroundColor: Constants.global.mehoBlue,
+                },
+                headerTintColor: Constants.global.mehoWhite,
+            }
+        },
+        TextTemplate: {
+            screen: TextTemplate,
+            navigationOptions: {
+                tabBarVisible: false,
+                title: '文案模版',
+                headerStyle: {
+                    backgroundColor: Constants.global.mehoBlue,
+                },
+                headerTintColor: Constants.global.mehoWhite,
+            }
+        },
+        Sharing: {
+            screen: Sharing,
+            navigationOptions: {
+                tabBarVisible: false,
+                title: '分享到朋友圈',
+                headerStyle: {
+                    backgroundColor: Constants.global.mehoWhite,
+                },
+                headerTintColor: Constants.global.mehoMainTextColor,
+            }
+        },
     },
     {
         initialRouteName: 'Favourite',

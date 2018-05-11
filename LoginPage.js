@@ -18,6 +18,7 @@ import {
     Alert,
     Animated,
     Keyboard,
+    StatusBar
 } from 'react-native';
 import Constants from './Constants';
 import DataCenter from './data';
@@ -484,6 +485,7 @@ export default class LoginPage extends Component {
     render() {
         return (
             <View flex={1}>
+                <StatusBar barStyle='default' />
                 <View style={styles.container}>
                     <Image defaultSource={require('./img/LOGO.png')}
                         source={{ uri: 'https://facebook.github.io/react/img/logo_og.png' }}

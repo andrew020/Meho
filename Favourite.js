@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, ActionSheetIOS, ActivityIndicator, Alert } from 'react-native';
+import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, ActionSheetIOS, ActivityIndicator, Alert, StatusBar } from 'react-native';
 import { SwipeableFlatList } from 'react-native-swipeable-flat-list';
 import {
     shareMessage,
@@ -117,7 +117,8 @@ export default class Favourites extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-            <ActivityIndicator style={{ position: "absolute", top: 20, left: Constants.screenWidth() / 2 - 20, width: 40, height: 40 }}
+                <StatusBar barStyle='light-content' />
+                <ActivityIndicator style={{ position: "absolute", top: 20, left: Constants.screenWidth() / 2 - 20, width: 40, height: 40 }}
                     size="large"
                     color={Constants.global.mehoBlue}
                     hidesWhenStopped={true}

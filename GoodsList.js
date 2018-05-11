@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, Alert, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, Alert, TouchableWithoutFeedback, StatusBar } from 'react-native';
 import DataCenter from './data';
 import constants from "./Constants";
 import * as wechat from 'react-native-wechat'
@@ -169,6 +169,7 @@ export default class GoodsList extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <StatusBar barStyle='light-content' />
                 <View style={styles.headerContainer}>
                     <CachedImage style={styles.headerImage} source={
                         this.state.userAvatar ? { uri: this.state.userAvatar } : require('./img/LOGO.png')

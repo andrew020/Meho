@@ -8,6 +8,7 @@ import {
     View,
     Dimensions,
     TouchableOpacity,
+    StatusBar
 } from 'react-native';
 import DataCenter from './data'
 
@@ -92,23 +93,26 @@ export default class TextTemplate extends Component {
 
     render() {
         return (
-            <FlatList style={styles.flatList}
-                data={this.state.datas}
-                renderItem={({ index, item }) =>
-                    <TouchableOpacity onPress={() => this._onPressItem(index, item)}>
-                        <View style={styles.item}>
-                            <Text style={styles.text}>{item}</Text>
-                        </View>
-                    </TouchableOpacity>
-                }
-                refreshing={this.state.isFetching}
-                onRefresh={this._onRefresh}
-                onEndReached={() => {
-                    this._OnLoadMore();
-                }}
-                onEndReachedThreshold={0.05}
-                keyExtractor={(item, index) => item}
-            />
+            <View flex={1}>
+                <StatusBar barStyle='light-content' />
+                <FlatList style={styles.flatList}
+                    data={this.state.datas}
+                    renderItem={({ index, item }) =>
+                        <TouchableOpacity onPress={() => this._onPressItem(index, item)}>
+                            <View style={styles.item}>
+                                <Text style={styles.text}>{item}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    }
+                    refreshing={this.state.isFetching}
+                    onRefresh={this._onRefresh}
+                    onEndReached={() => {
+                        this._OnLoadMore();
+                    }}
+                    onEndReachedThreshold={0.05}
+                    keyExtractor={(item, index) => item}
+                />
+            </View>
         );
     }
 }
@@ -116,6 +120,7 @@ export default class TextTemplate extends Component {
 const styles = StyleSheet.create({
     flatList: {
         backgroundColor: constants.global.mehoWhite,
+        flex: 1,
     },
     item: {
         paddingLeft: 10,

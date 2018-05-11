@@ -4,8 +4,9 @@ import {
     mehoMainTextFontColor,
     mehoWhite,
     mehoGrey,
-    mehoGreen
+    mehoGreen,
 } from "./Constants";
+import Constants from "./Constants";
 import {
     FlatList,
     StyleSheet,
@@ -14,7 +15,8 @@ import {
     View,
     StatusBar,
     Dimensions,
-    Button
+    Button,
+    TouchableOpacity
 } from 'react-native';
 import {
     shareMessage,
@@ -37,11 +39,9 @@ export default class Sharing extends Component {
         const params = navigation.state.params || {};
         return {
             headerRight: (
-                <Button
-                    onPress={params.share}
-                    title="发表"
-                    color={mehoGreen}
-                />
+                <TouchableOpacity onPress={params.share}>
+                    <Text style={{ fontSize: 17, color: Constants.global.mehoGreen, paddingLeft: 15, paddingRight: 15 }} >发表</Text>
+                </TouchableOpacity>
             ),
         };
     };
