@@ -412,6 +412,46 @@ function clearData(callback) {
     });
 }
 
+function wechatLogin(token, callback) {
+    let formData = new FormData();
+    formData.append('port', 8081);
+    formData.append('code', token);
+    formData.append('type', 1);
+    fetch('http://demo1.hixiaoqi.cn/InfMobileApi/wx_auth', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+            Host: 'demo1.hixiaoqi.cn'
+        },
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            if (1 === result['code']) {
+                setUser(
+                    result['data']['id'],
+                    result['data']['store_image'],
+                    result['data']['store_name'],
+                    result['data']['store_title'],
+                    result['data']['phone'],
+                    '',
+                    (succes, msg) => {
+                        callback(succes, msg)
+                    }
+                );
+            }
+            else {
+                callback(false, result['msg'])
+            }
+        })
+        .catch((error) => {
+            console.warn(error);
+            callback(false, error)
+        });
+}
+
 export default {
     checkUser: checkUser.bind(),
     setUser: setUser.bind(),
@@ -424,4 +464,5 @@ export default {
     getTextTemplate: getTextTemplate.bind(),
     createGoodsCode: createGoodsCode.bind(),
     clearData: clearData.bind(),
+    wechatLogin: wechatLogin.bind(),
 };

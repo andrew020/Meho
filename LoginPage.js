@@ -22,6 +22,7 @@ import {
 } from 'react-native';
 import Constants from './Constants';
 import DataCenter from './data';
+import * as wechat from 'react-native-wechat'
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' +
@@ -378,30 +379,6 @@ export default class LoginPage extends Component {
             .then((response) => response.json())
             .then((result) => {
                 console.log(result);
-                // // TUDO: remove test data
-                // DataCenter.setUser(
-                //     '3',
-                //     'https://wx.qlogo.cn/mmopen/vi_32/X7ynBZUxuKr02zR2KOP8Ct1HCiagXka3FQdko7YJFKouuNZGvRLznYoe8LmzUvaVr0u4qiaicXIfc2sQh6dWRmUTQ/0',//result['code']['store_image'],
-                //     'Hootang',
-                //     '大吉大利，今晚吃鸡',
-                //     '15108269939',
-                //     '',
-                //     (succes, msg) => {
-                //         if (succes) {
-                //             const { navigation } = this.props;
-                //             navigation.goBack();
-                //             navigation.state.params.doLogin();
-                //         }
-                //         else {
-                //             Alert.alert(
-                //                 "登录",
-                //                 msg
-                //             );
-                //         }
-                //     }
-                // );
-                // return;
-
                 if (result['code'] === 1) {
                     DataCenter.setUser(
                         result['data']['id'],
@@ -482,6 +459,52 @@ export default class LoginPage extends Component {
         }
     }
 
+    _wechatLogin = () => {
+        let scope = 'snsapi_userinfo';
+        let state = 'wechat_sdk_demo';
+
+        wechat.isWXAppInstalled()
+            .then((isInstalled) => {
+                if (isInstalled) {
+                    wechat.sendAuthRequest(scope, state)
+                        .then(responseCode => {
+                            console.log(responseCode.code);
+                            DataCenter.wechatLogin(
+                                responseCode.code,
+                                (succes, msg) => {
+                                    if (succes) {
+                                        const { navigation } = this.props;
+                                        navigation.goBack();
+                                        navigation.state.params.doLogin();
+                                    }
+                                    else {
+                                        Alert.alert(
+                                            "登录",
+                                            msg
+                                        );
+                                    }
+                                }
+                            );
+                        })
+                        .catch(err => {
+                            Alert.alert('登录授权发生错误：', err.message, [
+                                { text: '确定' }
+                            ]);
+                        })
+                }
+                else {
+                    Platform.OS == 'ios' ?
+                        Alert.alert('没有安装微信', '是否安装微信？', [
+                            { text: '取消' },
+                            { text: '确定', onPress: () => this.installWechat() }
+                        ]) :
+                        Alert.alert('没有安装微信', '请先安装微信客户端在进行登录', [
+                            { text: '确定' }
+                        ])
+                }
+            })
+    }
+
     render() {
         return (
             <View flex={1}>
@@ -499,10 +522,7 @@ export default class LoginPage extends Component {
                     </View>
                     <Text style={styles.smallFont}>one key sharing</Text>
                     <TouchableOpacity style={styles.wechatButton}
-                        onPress={() => {
-
-                        }
-                        }>
+                        onPress={this._wechatLogin}>
                         <View style={styles.wechatButtonContainer}>
                             <Image source={require('./img/wechat.png')}
                                 style={styles.wechatButtonImage}
