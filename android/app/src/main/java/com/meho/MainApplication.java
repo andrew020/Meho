@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.RNFetchBlob.RNFetchBlobPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.kmlidc.RNShareLocal.RNShareLocal;
 import com.theweflex.react.WeChatPackage;
 import io.realm.react.RealmReactPackage;
@@ -29,7 +28,6 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RNFetchBlobPackage(),
-            new VectorIconsPackage(),
             new RNShareLocal(),
             new WeChatPackage(),
             new RealmReactPackage()
