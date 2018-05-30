@@ -510,8 +510,7 @@ export default class LoginPage extends Component {
             <View flex={1}>
                 <StatusBar barStyle='default' />
                 <View style={styles.container}>
-                    <Image defaultSource={require('./img/LOGO.png')}
-                        source={{ uri: 'https://facebook.github.io/react/img/logo_og.png' }}
+                    <Image source={require('./img/LOGO.png')}
                         style={styles.avatar}
                     />
                     <View flex={0} marginTop={20}>

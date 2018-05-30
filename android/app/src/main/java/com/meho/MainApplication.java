@@ -1,6 +1,7 @@
 package com.meho;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.facebook.react.ReactApplication;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -17,6 +18,12 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
+  private static Context context;
+
+  public static Context getAppContext() {
+    return MainApplication.context;
+  }
+
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
@@ -26,11 +33,12 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-            new RNFetchBlobPackage(),
-            new RNShareLocal(),
-            new WeChatPackage(),
-            new RealmReactPackage()
+              new MainReactPackage(),
+              new RNFetchBlobPackage(),
+              new RNShareLocal(),
+              new WeChatPackage(),
+              new RealmReactPackage(),
+              new NativePackage()
       );
     }
 
@@ -48,6 +56,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    MainApplication.context = getApplicationContext();
     SoLoader.init(this, /* native exopackage */ false);
   }
 }

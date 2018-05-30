@@ -142,10 +142,16 @@ const Home = TabNavigator(
                 return <Image source={iconName} style={{height: 25, width: 25}} />
             },
         }),
-
+        tabBarPosition: 'bottom',
         tabBarOptions: {
             activeTintColor: Constants.global.mehoBlue,
             inactiveTintColor: 'gray',
+            showIcon: true,
+            style: {
+                backgroundColor: Constants.global.mehoWhite,
+                // borderTopWidth: 1,
+                // borderTopColor: 'white'
+            },
         },
         initialRouteName: 'Goods',
     }

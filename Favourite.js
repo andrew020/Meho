@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, ActionSheetIOS, ActivityIndicator, Alert, StatusBar } from 'react-native';
-import { SwipeableFlatList } from 'react-native-swipeable-flat-list';
 import {
     shareMessage,
     shareLink,

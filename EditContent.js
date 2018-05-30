@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, NativeModules, Alert, ScrollView, StatusBar } from 'react-native';
-import MCanvas from 'mcanvas';
-import Canvas from 'react-native-canvas';
 import Constants from "./Constants";
 import DataCenter from './data';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'

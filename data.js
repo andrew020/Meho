@@ -175,8 +175,8 @@ function getFavourites(callback) {
 
 function checkUser(callback) {
     openRealm(false, realm => {
-        // callback(1, 'test', 'test', 'https://wx.qlogo.cn/mmopen/vi_32/X7ynBZUxuKr02zR2KOP8Ct1HCiagXka3FQdko7YJFKouuNZGvRLznYoe8LmzUvaVr0u4qiaicXIfc2sQh6dWRmUTQ/0');
-        // return;
+        callback(1, 'test', 'test', 'https://wx.qlogo.cn/mmopen/vi_32/X7ynBZUxuKr02zR2KOP8Ct1HCiagXka3FQdko7YJFKouuNZGvRLznYoe8LmzUvaVr0u4qiaicXIfc2sQh6dWRmUTQ/0');
+        return;
         let users = realm.objects('User');
         if (users && 0 != users.length) {
             let user = users[0]
