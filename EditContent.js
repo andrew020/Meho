@@ -209,7 +209,7 @@ export default class EditContent extends Component {
             images.push(image);
         }
         var option = {
-            title: this.state.description,
+            text: this.state.description,
             imagesUrl: images,
             callback: (error) => {
                 if (!error) {

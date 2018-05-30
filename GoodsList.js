@@ -135,7 +135,7 @@ export default class GoodsList extends Component {
 
     _sharing = (item) => {
         var option = {
-            title: item['description'],
+            text: item['description'],
             imagesUrl: item['images'],
             callback: (error) => {
                 if (!error) {

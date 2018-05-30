@@ -52,7 +52,7 @@ export default class Sharing extends Component {
 
     share = () => {
         var option = {
-            title: this.state.text,
+            text: this.state.text,
             imagesUrl: this.state.images,
             callback: (error) => {
                 if (!error) {

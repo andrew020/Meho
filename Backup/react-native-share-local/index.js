@@ -34,7 +34,7 @@ export function shareLink(option){
 export function sharePictures(option){
   if(option instanceof Object && option.length == undefined){
     if(Platform.OS === 'ios'){
-      return shareLocal.pictures(option.imagesUrl,option.title,option.excluded,(result)=>{
+      return shareLocal.pictures(option.imagesUrl,option.text,option.excluded,(result)=>{
         if(option.callback)option.callback(result);
       });
     }else if (Platform.OS === 'android') {

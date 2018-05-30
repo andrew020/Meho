@@ -59,7 +59,7 @@ export default class Favourites extends Component {
 
     _sharing = (item) => {
         var option = {
-            title: item['text'],
+            text: item['text'],
             imagesUrl: item['images'],
             callback: (error) => {
                 if (!error) {
