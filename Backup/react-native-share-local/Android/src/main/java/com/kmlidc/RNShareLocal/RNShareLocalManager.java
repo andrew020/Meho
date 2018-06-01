@@ -1,6 +1,5 @@
 package com.kmlidc.RNShareLocal;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.content.Intent;
 import android.content.ComponentName;
@@ -17,8 +16,8 @@ import com.facebook.react.uimanager.IllegalViewOperationException;
 
 import com.facebook.react.bridge.ActivityEventListener;
 
+import android.os.AsyncTask;
 import android.util.Base64;
-import android.util.Log;
 
 import java.lang.String;
 import java.util.ArrayList;
@@ -144,26 +143,42 @@ private class RNShareLocalActivityEventListener implements ActivityEventListener
     }
 
     @ReactMethod
-    public void downloadImage(ReadableArray imagesUrl, Promise promise){
-        List<String> paths = new ArrayList<String>();
-        for(int i=0; i<imagesUrl.size();i++){
-            String imageUrl = imagesUrl.getString(i);
-            String prefix = "data:image/png;base64,";
-            String fileName = i + ".jpg";
-            if (imageUrl.startsWith(prefix)) {
-                String base64 = imageUrl.substring(prefix.length(), imageUrl.length());
-                byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
-                String path = this.save(decodedString, fileName);
-                paths.add(path);
-            }
-            else {
-                String path = this.download(imageUrl, fileName);
-                paths.add(path);
-            }
-        }
+    public void downloadImage(final ReadableArray imagesUrl, final Promise promise){
+        final ProgressDialog dialog = new ProgressDialog(getCurrentActivity());
+        dialog.setTitle("分享");
+        dialog.setMessage("加载中");
+        dialog.setCancelable(false);
+        dialog.show();
 
-        JSONArray array = new JSONArray(paths);
-        promise.resolve(array.toString());
+        new AsyncTask<Void, Void, JSONArray>() {
+            @Override
+            protected JSONArray doInBackground(Void... voids) {
+                List<String> paths = new ArrayList<String>();
+                for(int i=0; i<imagesUrl.size();i++){
+                    String imageUrl = imagesUrl.getString(i);
+                    String prefix = "data:image/png;base64,";
+                    String fileName = i + ".jpg";
+                    if (imageUrl.startsWith(prefix)) {
+                        String base64 = imageUrl.substring(prefix.length(), imageUrl.length());
+                        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
+                        String path = save(decodedString, fileName);
+                        paths.add(path);
+                    }
+                    else {
+                        String path = download(imageUrl, fileName);
+                        paths.add(path);
+                    }
+                }
+                JSONArray array = new JSONArray(paths);
+                return array;
+            }
+            protected void onPostExecute(JSONArray array) {
+                promise.resolve(array.toString());
+                super.onPostExecute(array);
+
+                dialog.dismiss();
+            }
+        }.execute();
     }
 
     //下载图片并保存
