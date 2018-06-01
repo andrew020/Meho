@@ -153,7 +153,7 @@ export default class EditContent extends Component {
         var datas = this.state.datas;
         for (var index = 0; index < datas.length; index++) {
             var item = datas[index];
-            var imageString = item['imageBase64'] ? item['imageBase64'] : item['imageString'];
+            var imageString = item['imageString'] + ' , ' + (item['imageBase64'] ? item['imageBase64'] : "");
             images.push(imageString);
         }
 
@@ -161,6 +161,7 @@ export default class EditContent extends Component {
             images,
             this.state.title,
             this.state.description ? this.state.description : '',
+            this.state.price,
             this.state.goodsID,
             this.state.imageTemplate ? this.state.imageTemplate['id'] : '',
             (result, error) => {

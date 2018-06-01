@@ -104,8 +104,8 @@ export default class Favourites extends Component {
 
                 var imageItem = {};
                 imageItem['key'] = index;
-                imageItem['imageString'] = imageInfo;
-                imageItem['imageBase64'] = null;
+                imageItem['imageString'] = imageInfo.imageString;
+                imageItem['imageBase64'] = imageInfo.imageBase64;
                 imageItem['selected'] = true;
 
                 images.push(imageItem);
@@ -176,9 +176,9 @@ export default class Favourites extends Component {
     };
 
     renderImage = (item) => {
-        if (item.startsWith('data:')) {
+        if (item.imageBase64.length > 0) {
             return <Image style={style.itemImage}
-                source={{ uri: item }}
+                source={{ uri: item.imageBase64 }}
                 height={(Constants.screenWidth() - 73) / 4}
                 width={(Constants.screenWidth() - 73) / 4}
                 resizeMode="contain"
@@ -186,7 +186,7 @@ export default class Favourites extends Component {
         }
         else {
             return <CachedImage style={style.itemImage}
-                source={{ uri: item }}
+                source={{ uri: item.imageString }}
                 height={(Constants.screenWidth() - 73) / 4}
                 width={(Constants.screenWidth() - 73) / 4}
                 resizeMode="contain"

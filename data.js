@@ -30,6 +30,7 @@ Favourite.schema = {
         images: 'string[]',
         title: 'string',
         text: 'string',
+        price: 'string',
         goodsID: 'string',
         templateID: 'string',
         createTimeStamp: 'float',
@@ -82,7 +83,7 @@ function uuidv4() {
     });
 }
 
-function addFavourite(images, title, text, goodsID, templateID, callback) {
+function addFavourite(images, title, text, price, goodsID, templateID, callback) {
     openRealm(true, realm => {
 
         if (null === realm) {
@@ -100,6 +101,7 @@ function addFavourite(images, title, text, goodsID, templateID, callback) {
                     images: images,
                     title: title,
                     text: text,
+                    price: price,
                     goodsID: goodsID,
                     templateID: templateID,
                     createTimeStamp: timestamp,
@@ -138,9 +140,21 @@ function sendNewFavourites(objects) {
         //     let imageObject = imageObjects[indexForImage];
         //     images.push(imageObject);
         // }
-        data['images'] = Array.from(item.images);
+        var imagesString = Array.from(item.images);
+        var images = [];
+        for (var imageindex = 0; imageindex < imagesString.length; imageindex++) {
+            var dic = {};
+            var imageString = imagesString[imageindex];
+            var array = imageString.split(" , ");
+            images.push({
+                "imageString": array[0],
+                "imageBase64": array[1],
+            });
+        }
+        data['images'] = images;
         data['title'] = item.title;
         data['text'] = item.text;
+        data['price'] = item.price;
         data['goodsID'] = item.goodsID;
         data['templateID'] = item.templateID;
         results.push(data);
