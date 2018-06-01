@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, ActionSheetIOS, ActivityIndicator, Alert, StatusBar } from 'react-native';
+import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, ActionSheetIOS, ActivityIndicator, Alert, StatusBar, Platform } from 'react-native';
 import {
     shareMessage,
     shareLink,
@@ -71,46 +71,64 @@ export default class Favourites extends Component {
     }
 
     _editOnPress = (item) => {
-        ActionSheetIOS.showActionSheetWithOptions({
-            options: ['取消', '编辑', '删除'],
-            destructiveButtonIndex: 2,
-            cancelButtonIndex: 0,
-        },
-            (buttonIndex) => {
-                if (buttonIndex === 1) {
-                    var images = [];
-                    for (var index = 0; index < item['images'].length; index++) {
-                        var imageInfo = item['images'][index];
-
-                        var imageItem = {};
-                        imageItem['key'] = index;
-                        imageItem['imageString'] = imageInfo;
-                        imageItem['imageBase64'] = null;
-                        imageItem['selected'] = true;
-
-                        images.push(imageItem);
-                    }
-
-                    DataCenter.getTemplateDetail(item['templateID'], (template) => {
-                        this.setState({ loading: false });
-                        this.props.navigation.navigate(
-                            'EditContent',
-                            {
-                                goodsID: item['goodsID'],
-                                title: item['title'],
-                                price: item['price'],
-                                description: item['text'],
-                                datas: images,
-                                template: template,
-                            }
-                        )
-                    });
+        if (Platform.OS === 'android') {
+            Alert.alert(
+                '',
+                '编辑',
+                [
+                    { text: '删除', onPress: () => this._action(2, item), style: 'destructive' },
+                    { text: '编辑', onPress: () => this._action(1, item) },
+                    { text: '取消', onPress: () => this._action(0, item), style: 'cancel' },
+                ],
+                { cancelable: false }
+            );
+        }
+        else if (Platform.OS === 'ios') {
+            ActionSheetIOS.showActionSheetWithOptions({
+                options: ['取消', '编辑', '删除'],
+                destructiveButtonIndex: 2,
+                cancelButtonIndex: 0,
+            },
+                (buttonIndex) => {
+                    this._action(buttonIndex, item);
                 }
-                else if (buttonIndex === 2) {
-                    DataCenter.deleteFavourite(item['key'])
-                }
+            );
+        }
+    }
+
+    _action = (buttonIndex, item) => {
+        if (buttonIndex === 1) {
+            var images = [];
+            for (var index = 0; index < item['images'].length; index++) {
+                var imageInfo = item['images'][index];
+
+                var imageItem = {};
+                imageItem['key'] = index;
+                imageItem['imageString'] = imageInfo;
+                imageItem['imageBase64'] = null;
+                imageItem['selected'] = true;
+
+                images.push(imageItem);
             }
-        );
+
+            DataCenter.getTemplateDetail(item['templateID'], (sucess, template) => {
+                this.setState({ loading: false });
+                this.props.navigation.navigate(
+                    'EditContent',
+                    {
+                        goodsID: item['goodsID'],
+                        title: item['title'],
+                        price: item['price'],
+                        description: item['text'],
+                        datas: images,
+                        template: template,
+                    }
+                )
+            });
+        }
+        else if (buttonIndex === 2) {
+            DataCenter.deleteFavourite(item['key'])
+        }
     }
 
     render() {
