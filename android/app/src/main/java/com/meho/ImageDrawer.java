@@ -431,7 +431,8 @@ public class ImageDrawer extends ReactContextBaseJavaModule implements ImageCach
             }
         }
 
-        Iterator iterator = goodsLoadingDic.entrySet().iterator();
+        HashMap<String, Integer> tmp = (HashMap<String, Integer>) goodsLoadingDic.clone();
+        Iterator iterator = tmp.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry pair = (Map.Entry) iterator.next();
             Object key = pair.getKey();
