@@ -10,6 +10,7 @@ import {
 } from 'react-native-share-local'
 import { CachedImage } from "react-native-img-cache";
 import LoadingView from 'rn-loading-view';
+import { platform } from 'os';
 
 export default class EditContent extends Component {
 
@@ -263,11 +264,20 @@ export default class EditContent extends Component {
         }
     }
 
+    _keyboardDismissMode = () => {
+        if (platform.OS === 'android') {
+            return "interactive";
+        }
+        else {
+            return "on-drag";
+        }
+    }
+
     render() {
         return (
             <View style={style.rootView}>
                 <StatusBar barStyle='light-content' />
-                <KeyboardAwareScrollView flex={1} keyboardDismissMode={'on-drag'}>
+                <KeyboardAwareScrollView flex={1} keyboardDismissMode={this._keyboardDismissMode()}>
                     <View style={style.container}>
                         <View style={style.titleView}>
                             <Text style={style.titleText}>图片选择</Text>
@@ -307,6 +317,7 @@ export default class EditContent extends Component {
                         <TextInput ref="text"
                             style={style.textInput}
                             multiline={true}
+                            numberOfLines={999}
                             value={this.state.description}
                             onChangeText={(text) => this.setState({ description: text })} />
                     </View>
@@ -415,6 +426,8 @@ const style = StyleSheet.create({
         color: Constants.global.mehoSecondTextColor,
         height: 150,
         padding: 5,
+        textAlignVertical: "top",
+        flex: 0,
     },
     bottomContainer: {
         alignSelf: 'stretch',
