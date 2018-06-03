@@ -280,25 +280,62 @@ RCT_EXPORT_METHOD(pictures:(NSArray *)ImagesUrl title:(NSString*)title excluded:
                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                 pasteboard.string = title;
                 
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"文字已复制\n分享朋友圈时请粘贴" preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:excludedArray];
-                    
-                    activityVC.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-                        if (completed){
-                            //NSLog(@"The Activity: %@ was completed", activityType);
-                            callback(@[activityType]);
-                        }else{
-                            //NSLog(@"The Activity: %@ was NOT completed", activityType);
-                            callback(@[@"fail"]);
-                        }
-                        
-                    };
-                    
-                    [rootController presentViewController:activityVC animated:YES completion:nil];
-                }]];
+                UIView *tipsBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 280, 70)];
+                tipsBackground.backgroundColor = [UIColor colorWithWhite:0 alpha:0.7];
+                tipsBackground.layer.masksToBounds = YES;
+                tipsBackground.layer.cornerRadius = 10;
+                UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 170, 50)];
+                tipsLabel.textColor = [UIColor whiteColor];
+                tipsLabel.text = @"文字已复制\n分享朋友圈时请粘贴";
+                tipsLabel.numberOfLines = 0;
+                tipsLabel.adjustsFontSizeToFitWidth = YES;
+                tipsLabel.textAlignment = NSTextAlignmentCenter;
+                [tipsBackground addSubview:tipsLabel];
+                tipsLabel.center = tipsBackground.center;
+                [UIApplication.sharedApplication.keyWindow addSubview:tipsBackground];
+                tipsBackground.center = UIApplication.sharedApplication.keyWindow.center;
                 
-                [rootController presentViewController:alert animated:YES completion:nil];
+                UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:excludedArray];
+                activityVC.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+                    if (completed){
+                        //NSLog(@"The Activity: %@ was completed", activityType);
+                        callback(@[activityType]);
+                    }else{
+                        //NSLog(@"The Activity: %@ was NOT completed", activityType);
+                        callback(@[@"fail"]);
+                    }
+                    
+                };
+                
+                [rootController presentViewController:activityVC animated:YES completion:nil];
+
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [UIView animateWithDuration:0.5 animations:^{
+                        tipsBackground.alpha = 0;
+                    } completion:^(BOOL finished) {
+                        [tipsBackground removeFromSuperview];
+                    }];
+                });
+                
+//                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"文字已复制\n分享朋友圈时请粘贴" preferredStyle:UIAlertControllerStyleAlert];
+//                [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:excludedArray];
+//
+//                    activityVC.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+//                        if (completed){
+//                            //NSLog(@"The Activity: %@ was completed", activityType);
+//                            callback(@[activityType]);
+//                        }else{
+//                            //NSLog(@"The Activity: %@ was NOT completed", activityType);
+//                            callback(@[@"fail"]);
+//                        }
+//
+//                    };
+//
+//                    [rootController presentViewController:activityVC animated:YES completion:nil];
+//                }]];
+//
+//                [rootController presentViewController:alert animated:YES completion:nil];
             });
         });
     });
