@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, NativeModules, Alert, ScrollView, StatusBar } from 'react-native';
+import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, NativeModules, Alert, ScrollView, StatusBar, Platform } from 'react-native';
 import Constants from "./Constants";
 import DataCenter from './data';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -10,7 +10,6 @@ import {
 } from 'react-native-share-local'
 import { CachedImage } from "react-native-img-cache";
 import LoadingView from 'rn-loading-view';
-import { platform } from 'os';
 
 export default class EditContent extends Component {
 
@@ -265,7 +264,7 @@ export default class EditContent extends Component {
     }
 
     _keyboardDismissMode = () => {
-        if (platform.OS === 'android') {
+        if (Platform.OS === 'android') {
             return "interactive";
         }
         else {

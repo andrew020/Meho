@@ -1,5 +1,7 @@
 package com.kmlidc.RNShareLocal;
 import android.app.ProgressDialog;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.net.Uri;
 import android.content.Intent;
 import android.content.ComponentName;
@@ -139,6 +141,9 @@ private class RNShareLocalActivityEventListener implements ActivityEventListener
             intent.setComponent(new ComponentName(component.getString(0), component.getString(1)));
         }
 
+
+        ClipboardManager cmb = (ClipboardManager)(getCurrentActivity().getSystemService(Context.CLIPBOARD_SERVICE));
+        cmb.setText(message.trim());
         getCurrentActivity().startActivityForResult(chooser,SHARE_REQUEST);
     }
 
@@ -146,7 +151,7 @@ private class RNShareLocalActivityEventListener implements ActivityEventListener
     public void downloadImage(final ReadableArray imagesUrl, final Promise promise){
         final ProgressDialog dialog = new ProgressDialog(getCurrentActivity());
         dialog.setTitle("分享");
-        dialog.setMessage("加载中");
+        dialog.setMessage("加载中……文字已复制，分享朋友圈时请粘贴");
         dialog.setCancelable(false);
         dialog.show();
 
