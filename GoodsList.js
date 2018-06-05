@@ -5,6 +5,7 @@ import constants from "./Constants";
 import * as wechat from 'react-native-wechat'
 import { sharePictures } from 'react-native-share-local'
 import { CachedImage } from "react-native-img-cache";
+import Constants from './Constants';
 
 export default class GoodsList extends Component {
 
@@ -136,7 +137,7 @@ export default class GoodsList extends Component {
     _sharing = (item) => {
         var option = {
             text: item['description'],
-            imagesUrl: item['images'],
+            imagesUrl: Constants.convertImagesURLWithMedial(item['images']),
             callback: (error) => {
                 if (!error) {
                     alert("这是回调方法")

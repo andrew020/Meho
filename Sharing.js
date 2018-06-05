@@ -5,6 +5,7 @@ import {
     mehoWhite,
     mehoGrey,
     mehoGreen,
+    convertImagesURLWithMedial,
 } from "./Constants";
 import Constants from "./Constants";
 import {
@@ -51,9 +52,10 @@ export default class Sharing extends Component {
     }
 
     share = () => {
+        var images = [];
         var option = {
             text: this.state.text,
-            imagesUrl: this.state.images,
+            imagesUrl: convertImagesURLWithMedial(this.state.images),
             callback: (error) => {
                 if (!error) {
                     alert("这是回调方法")

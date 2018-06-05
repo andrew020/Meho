@@ -8,7 +8,7 @@ import {
     shareLink,
     sharePictures
 } from 'react-native-share-local'
-import { CachedImage } from "react-native-img-cache";
+import { CachedImage, ImageCache } from "react-native-img-cache";
 import LoadingView from 'rn-loading-view';
 
 export default class EditContent extends Component {
@@ -81,8 +81,9 @@ export default class EditContent extends Component {
                 var newDatas = [];
                 var indexs = [];
                 for (var index = 0; index < this.state.datas.length; index++) {
-                    var item = this.state.datas[index];
+                    var item = Object.assign({}, this.state.datas[index]);
                     if (item.selected === true) {
+                        item.imageString = Constants.getMedialImageURL(item.imageString);
                         newDatas.push(item);
                         indexs.push(index);
                     }
@@ -93,6 +94,7 @@ export default class EditContent extends Component {
                     var copyDatas = this.state.datas;
                     for (var index = 0; index < newGoodsInfo.length; index++) {
                         var item = newGoodsInfo[index];
+                        item.imageString = Constants.getSmallImageURL(item.imageString);
                         var originalIndex = indexs[index];
                         copyDatas[originalIndex] = item;
                     }
@@ -211,7 +213,7 @@ export default class EditContent extends Component {
         }
         var option = {
             text: this.state.description,
-            imagesUrl: images,
+            imagesUrl: Constants.convertImagesURLWithMedial(images),
             callback: (error) => {
                 if (!error) {
                     alert("这是回调方法")

@@ -172,7 +172,7 @@ public class ImageCache {
 				addTaskToQueue(task, priority);
 			} else {
 				Log.e(">>>>>>>>",">>>>不为空值---"+bitmap);
-				if (callback != null && bitmap != null) {
+				if (callback != null) {
                     callback.onComplete(bitmap, imageUrl);
 				}
 			}
@@ -473,7 +473,7 @@ public class ImageCache {
 			// 根据Tag找到相应的ImageView控件，将下载好的图片显示出来。
 			LoadCompletion callback = (LoadCompletion) callbackManager.remove(imageUrl);
 			Log.d("tag", "onPostExecute = " + imageUrl);
-			if (callback != null && bitmap != null) {
+			if (callback != null) {
                 callback.onComplete(bitmap, imageUrl);
 			}
 			removeTaskFromLoadQueue(this);
@@ -496,6 +496,7 @@ public class ImageCache {
 			try {
 				final URL url = new URL(urlString);
 				urlConnection = (HttpURLConnection) url.openConnection();
+				urlConnection.setConnectTimeout(20 * 1000);
 				in = new BufferedInputStream(urlConnection.getInputStream(),
 						8 * 1024);
 				out = new BufferedOutputStream(outputStream, 8 * 1024);

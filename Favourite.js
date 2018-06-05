@@ -60,7 +60,7 @@ export default class Favourites extends Component {
     _sharing = (item) => {
         var option = {
             text: item['text'],
-            imagesUrl: item['images'],
+            imagesUrl:  Constants.convertImagesURLWithMedial(item['images']),
             callback: (error) => {
                 if (!error) {
                     alert("这是回调方法")

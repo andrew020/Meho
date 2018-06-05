@@ -1,7 +1,7 @@
 'use strict';
 
 import Realm from 'realm';
-
+import Constants from './Constants'
 
 class User {
 
@@ -326,7 +326,12 @@ function getGoodsList(pageIndex, pageSize, callback) {
                         item['id'] = goodsInfo['id'];
                         item['name'] = goodsInfo['goods_name'];
                         item['description'] = goodsInfo['goods_description'];
-                        item['images'] = goodsInfo['goods_images'];
+                        var images = [];
+                        var max = goodsInfo['goods_images'].length;
+                        for (var imageIndex = 0; imageIndex < max; imageIndex++) {
+                            images.push(Constants.getSmallImageURL(goodsInfo['goods_images'][imageIndex]));
+                        }
+                        item['images'] = images;
                         item['price'] = goodsInfo['goods_price'];
 
                         filter.push(item);

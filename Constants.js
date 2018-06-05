@@ -26,8 +26,39 @@ function screenHeight() {
     return width;
 }
 
+function getSmallImageURL(imageURL) {
+    var endindex = imageURL.indexOf("?imageView2/");
+    if (endindex >= 0) {
+        imageURL = imageURL.substr(0, endindex);
+    }
+    return imageURL + "?imageView2/1/w/200/h/200/q/80";
+}
+
+function getMedialImageURL(imageURL) {
+    var endindex = imageURL.indexOf("?imageView2/");
+    if (endindex >= 0) {
+        imageURL = imageURL.substr(0, endindex);
+    }
+    return imageURL + "?imageView2/1/w/640/h/640/q/80";
+}
+
+function convertImagesURLWithMedial(images) {
+    var newImages = [];
+    for (var index = 0; index < images.length; index++) {
+        var imageURL = images[index];
+        if (imageURL.startsWith("http")) {
+            imageURL = getMedialImageURL(imageURL);
+        }
+        newImages.push(imageURL);
+    }
+    return newImages;
+}
+
 export default {
     global: Global,
     screenWidth: screenWidth.bind(),
     screenHeight: screenHeight.bind(),
+    getSmallImageURL: getSmallImageURL.bind(),
+    getMedialImageURL: getMedialImageURL.bind(),
+    convertImagesURLWithMedial: convertImagesURLWithMedial.bind(),
 };
