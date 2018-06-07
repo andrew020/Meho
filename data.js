@@ -239,12 +239,11 @@ function setUser(userID,
 function getTemplateList(callback) {
     let formData = new FormData();
     formData.append('port', 8081);
-    fetch('http://demo1.hixiaoqi.cn/InfSetShopApi/template_list', {
+    fetch(Constants.formatRequestURL(Constants.global.domain, Constants.global.apiCategoryShop, "template_list"), {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
-            Host: 'demo1.hixiaoqi.cn'
         },
         body: formData,
     })
@@ -268,12 +267,11 @@ function getTemplateDetail(id, callback) {
     let formData = new FormData();
     formData.append('port', 8081);
     formData.append('id', id);
-    fetch('http://demo1.hixiaoqi.cn/InfSetShopApi/template_detail', {
+    fetch(Constants.formatRequestURL(Constants.global.domain, Constants.global.apiCategoryShop, "template_detail"), {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
-            Host: 'demo1.hixiaoqi.cn'
         },
         body: formData,
     })
@@ -304,12 +302,11 @@ function getGoodsList(pageIndex, pageSize, callback) {
         formData.append('goods_state', 1);
         formData.append('page', pageIndex);
         formData.append('page_size', pageSize);
-        fetch('http://demo1.hixiaoqi.cn/InfPublishApi/get_my_goods', {
+        fetch(Constants.formatRequestURL(Constants.global.domain, Constants.global.apiCategoryPublic, "get_my_goods"), {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'multipart/form-data',
-                Host: 'demo1.hixiaoqi.cn'
             },
             body: formData,
         })
@@ -355,12 +352,11 @@ function getTextTemplate(pageIndex, pageSize, callback) {
     formData.append('port', 8081);
     formData.append('page', pageIndex);
     formData.append('page_size', pageSize);
-    fetch('http://demo1.hixiaoqi.cn/InfMobileApi/get_content_list', {
+    fetch(Constants.formatRequestURL(Constants.global.domain, Constants.global.apiCategoryMobile, "get_content_list"), {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
-            Host: 'demo1.hixiaoqi.cn'
         },
         body: formData,
     })
@@ -391,12 +387,11 @@ function createGoodsCode(goodsID, callback) {
     let formData = new FormData();
     formData.append('port', 8081);
     formData.append('goods_id', goodsID);
-    fetch('http://demo1.hixiaoqi.cn/InfSetShopApi/create_goods_code', {
+    fetch(Constants.formatRequestURL(Constants.global.domain, Constants.global.apiCategoryShop, "create_goods_code"), {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
-            Host: 'demo1.hixiaoqi.cn'
         },
         body: formData,
     })
@@ -436,12 +431,11 @@ function wechatLogin(token, callback) {
     formData.append('port', 8081);
     formData.append('code', token);
     formData.append('type', 1); // 1 真实登录，2 模拟登录
-    fetch('http://demo1.hixiaoqi.cn/InfMobileApi/wx_auth', {
+    fetch(Constants.formatRequestURL(Constants.global.domain, Constants.global.apiCategoryMobile, "wx_auth"), {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
-            Host: 'demo1.hixiaoqi.cn'
         },
         body: formData,
     })

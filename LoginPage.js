@@ -276,12 +276,11 @@ export default class LoginPage extends Component {
                 let formData = new FormData();
                 formData.append('phone', text);
                 formData.append('port', 8081);
-                fetch('http://demo1.hixiaoqi.cn/InfMobileApi/check_phone', {
+                fetch(Constants.formatRequestURL(Constants.global.domain, Constants.global.apiCategoryMobile, "check_phone"), {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
                         'Content-Type': 'multipart/form-data',
-                        Host: 'demo1.hixiaoqi.cn'
                     },
                     body: formData,
                 })
@@ -320,12 +319,11 @@ export default class LoginPage extends Component {
         formData = new FormData();
         formData.append('phone', text);
         formData.append('port', 8081);
-        fetch('http://demo1.hixiaoqi.cn/InfMobileApi/send_code', {
+        fetch(Constants.formatRequestURL(Constants.global.domain, Constants.global.apiCategoryMobile, "send_code"), {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'multipart/form-data',
-                Host: 'demo1.hixiaoqi.cn'
             },
             body: formData,
         })
@@ -367,12 +365,11 @@ export default class LoginPage extends Component {
         formData.append('phone', phone);
         formData.append('port', 8081);
         formData.append('code', OTP);
-        fetch('http://demo1.hixiaoqi.cn/InfMobileApi/phone_login', {
+        fetch(Constants.formatRequestURL(Constants.global.domain, Constants.global.apiCategoryMobile, "phone_login"), {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'multipart/form-data',
-                Host: 'demo1.hixiaoqi.cn'
             },
             body: formData,
         })

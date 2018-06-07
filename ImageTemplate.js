@@ -78,7 +78,7 @@ export default class ImageTemplate extends Component {
             <View style={styles.flatItem}>
                 <CachedImage style={styles.image}
                     source={{
-                        uri: item['background_image']
+                        uri: item['cover_image']
                     }}
                     resizeMode="contain"
                 />

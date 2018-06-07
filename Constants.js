@@ -14,7 +14,51 @@ var Global = {
     mehoMainTextFontSize: 15,
     mehoSecondTextColor: '#6c6c6c',
     mehoSecondTextFontSize: 13.5,
+
+    domain: "https://www.meho.shop",
+    apiCategoryShop: "InfSetShopApi",
+    apiCategoryPublic: "InfPublishApi",
+    apiCategoryMobile: "InfMobileApi",
 };
+
+function formatRequestURL(domainString, apiCategory, api) {
+    if (domainString === null || apiCategory === null || api === null) {
+        return "";
+    }
+
+    while (domainString.length > 0 && (domainString.charAt(domainString.length - 1) === '/')) {
+        domainString = domainString.substr(0, domainString.length - 1);
+    }
+    if (domainString.length == 0) {
+        return "";
+    }
+
+    while (apiCategory.length > 0 && (apiCategory.charAt(apiCategory.length - 1) === '/')) {
+        apiCategory = apiCategory.substr(0, apiCategory.length - 1);
+    }
+    while (apiCategory.length > 0 && (apiCategory.charAt(0) === '/')) {
+        apiCategory = apiCategory.substr(1, apiCategory.length - 1);
+    }
+    if (apiCategory.length == 0) {
+        return "";
+    }
+    
+    domainString += ("/" + apiCategory);
+
+    while (api.length > 0 && (api.charAt(api.length - 1) === '/')) {
+        api = api.substr(0, api.length - 1);
+    }
+    while (api.length > 0 && (api.charAt(0) === '/')) {
+        api = api.substr(1, api.length - 1);
+    }
+    if (api.length == 0) {
+        return "";
+    }
+    
+    domainString += ("/" + api);
+
+    return domainString;
+}
 
 function screenWidth() {
     var width = Dimensions.get('window').width;
@@ -61,4 +105,5 @@ export default {
     getSmallImageURL: getSmallImageURL.bind(),
     getMedialImageURL: getMedialImageURL.bind(),
     convertImagesURLWithMedial: convertImagesURLWithMedial.bind(),
+    formatRequestURL: formatRequestURL.bind(),
 };
