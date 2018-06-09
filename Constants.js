@@ -15,7 +15,7 @@ var Global = {
     mehoSecondTextColor: '#6c6c6c',
     mehoSecondTextFontSize: 13.5,
 
-    domain: "https://www.meho.shop",
+    domain: "https://shop.mehoin.com/",
     apiCategoryShop: "InfSetShopApi",
     apiCategoryPublic: "InfPublishApi",
     apiCategoryMobile: "InfMobileApi",
