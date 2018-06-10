@@ -1,12 +1,4 @@
 import React, { Component } from 'react';
-import {
-    mehoMainTextFontSize,
-    mehoMainTextFontColor,
-    mehoWhite,
-    mehoGrey,
-    mehoGreen,
-    convertImagesURLWithMedial,
-} from "./Constants";
 import Constants from "./Constants";
 import {
     FlatList,
@@ -55,7 +47,7 @@ export default class Sharing extends Component {
         var images = [];
         var option = {
             text: this.state.text,
-            imagesUrl: convertImagesURLWithMedial(this.state.images),
+            imagesUrl: Constants.convertImagesURLWithMedial(this.state.images),
             callback: (error) => {
                 if (!error) {
                     alert("这是回调方法")
@@ -115,14 +107,14 @@ const styles = StyleSheet.create({
     },
     text: {
         padding: 15,
-        fontSize: mehoMainTextFontSize,
-        color: mehoMainTextFontColor,
-        backgroundColor: mehoWhite,
+        fontSize: Constants.global.mehoMainTextFontSize,
+        color: Constants.global.mehoMainTextFontColor,
+        backgroundColor: Constants.global.mehoWhite,
     },
     flatList: {
         width: Dimensions.get('window').width,
         padding: 10,
-        backgroundColor: mehoWhite,
+        backgroundColor: Constants.global.mehoWhite,
     },
     image: {
         margin: 5,
