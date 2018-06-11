@@ -31,6 +31,10 @@ const instructions = Platform.select({
         'Shake or press menu button for dev menu',
 });
 
+function scale() {
+    return Constants.screenHeight() / 667.0
+}
+
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
@@ -44,7 +48,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 50,
-        marginTop: 100
+        marginTop: 125 * scale() - 25
     },
     appNameFont: {
         fontSize: 17,
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
         height: 44,
         marginLeft: 40,
         marginRight: 40,
-        marginTop: 50,
+        marginTop: 72 * scale() - 22,
         alignSelf: 'stretch',
     },
     wechatButtonContainer: {
@@ -77,7 +81,7 @@ const styles = StyleSheet.create({
         height: 44,
         marginLeft: 40,
         marginRight: 40,
-        marginTop: 40,
+        marginTop: 72 * scale() - 22,
         flexDirection: 'row',
         alignSelf: 'stretch',
         alignItems: 'center',
@@ -226,8 +230,6 @@ export default class LoginPage extends Component {
             })
         ]).start();
     };
-
-
 
     isValiedNumber = (text) => {
         var reg = /^1[3|4|5|7|8][0-9]{9}$/;
@@ -429,7 +431,8 @@ export default class LoginPage extends Component {
                         <TextInput ref="phoneNumber"
                             placeholder="请输入手机号"
                             style={popViewStyles.input}
-                            keyboardType='phone-pad' />
+                            keyboardType='phone-pad'
+                        />
                         <TouchableOpacity disabled={this.state.codeComing >= 0}
                             onPress={() => {
                                 this.checkPhoneNumber(this.refs.phoneNumber._lastNativeText);
@@ -444,7 +447,8 @@ export default class LoginPage extends Component {
                         <TextInput ref="OTPCode"
                             placeholder="请输入验证码"
                             style={popViewStyles.input}
-                            keyboardType='phone-pad' />
+                            keyboardType='phone-pad'
+                        />
                     </View >
                     <TouchableOpacity style={popViewStyles.loginButton} onPress={() => {
                         this.login(this.refs.phoneNumber._lastNativeText, this.refs.OTPCode._lastNativeText);
@@ -510,7 +514,7 @@ export default class LoginPage extends Component {
                     <Image source={require('./img/LOGO.png')}
                         style={styles.avatar}
                     />
-                    <View flex={0} marginTop={20}>
+                    <View flex={0} marginTop={35 * scale() - 15}>
                         <Text style={styles.normalFont}>
                             <Text style={styles.appNameFont}>密货 </Text>
                             - 一键分享
@@ -526,7 +530,7 @@ export default class LoginPage extends Component {
                             <Text style={styles.wechatButtonText}>微信登录</Text>
                         </View>
                     </TouchableOpacity>
-                    <View flex={0} marginTop={40}>
+                    <View flex={0} marginTop={50 * scale() - 10}>
                         <Text style={styles.normalFont}>或</Text>
                     </View>
                     <TouchableOpacity style={styles.phoneNumberButton}
@@ -536,7 +540,7 @@ export default class LoginPage extends Component {
                         }>
                         <Text style={styles.phoneNumberButtonText}>使用手机号登录</Text>
                     </TouchableOpacity>
-                    <View flex={0} position='absolute' bottom={25}>
+                    <View flex={0} position='absolute' top={Constants.screenHeight() - 60}>
                         <Text style={styles.tipFont}>美货科技提供技术支持</Text>
                         <Text style={styles.tipFont}>www.meoho.com</Text>
                     </View>
