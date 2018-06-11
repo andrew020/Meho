@@ -386,6 +386,7 @@ export default class LoginPage extends Component {
                         result['data']['store_title'],
                         result['data']['phone'],
                         '',
+                        result['data']['member_id'],
                         (succes, msg) => {
                             if (succes) {
                                 const { navigation } = this.props;
