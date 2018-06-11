@@ -271,10 +271,10 @@ export default class LoginPage extends Component {
 
         if (this.codeTimer == null) {
             this.setState({
-                codeComing: 60,
+                codeComing: 59,
             }, () => {
                 this.startOTPTimer();
-
+                
                 let formData = new FormData();
                 formData.append('phone', text);
                 formData.append('port', 8081);
@@ -542,7 +542,7 @@ export default class LoginPage extends Component {
                     </TouchableOpacity>
                     <View flex={0} position='absolute' top={Constants.screenHeight() - 60}>
                         <Text style={styles.tipFont}>美货科技提供技术支持</Text>
-                        <Text style={styles.tipFont}>www.meoho.com</Text>
+                        <Text style={styles.tipFont}>www.mehoin.com</Text>
                     </View>
                 </View>
                 {this.showPhoneNumberLogin()}

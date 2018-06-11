@@ -8,7 +8,8 @@ import {
     View,
     Dimensions,
     TouchableOpacity,
-    StatusBar
+    StatusBar,
+    Alert
 } from 'react-native';
 import DataCenter from './data'
 
@@ -77,7 +78,7 @@ export default class TextTemplate extends Component {
             }
 
             if (msg && msg.length) {
-                Alert(
+                Alert.alert(
                     "文字模版",
                     msg,
                 );
