@@ -15,7 +15,8 @@ User.schema = {
         name: 'string',
         sign: 'string',
         phoneNumber: 'string',
-        wxOpenID: 'string'
+        wxOpenID: 'string',
+        memberID: 'string',
     }
 };
 
@@ -62,14 +63,23 @@ let favourites = null;
 
 function openRealm(keepRealm, callback) {
     if (keepRealm || null === staticRealm) {
-        Realm.open({ schema: [User.schema, Favourite.schema] })
-            .then(realm => {
-                staticRealm = realm;
-                callback(realm);
-            })
-            .catch(error => {
-                callback(null);
-            });
+        Realm.open({
+            schema: [User.schema, Favourite.schema],
+            schemaVersion: 2.0,
+            migration: (oldRealm, newRealm) => {
+                if (oldRealm.schemaVersion < 2.0) {
+                    let favourites = newRealm.objects('Favourite');
+                    newRealm.delete(favourites);
+                    let users = newRealm.objects('User');
+                    newRealm.delete(users);
+                }
+            }
+        }).then(realm => {
+            staticRealm = realm;
+            callback(realm);
+        }).catch(error => {
+            callback(null);
+        });
     }
     else {
         callback(staticRealm);
@@ -189,15 +199,15 @@ function getFavourites(callback) {
 
 function checkUser(callback) {
     openRealm(false, realm => {
-        // callback(1, 'test', 'test', 'https://wx.qlogo.cn/mmopen/vi_32/X7ynBZUxuKr02zR2KOP8Ct1HCiagXka3FQdko7YJFKouuNZGvRLznYoe8LmzUvaVr0u4qiaicXIfc2sQh6dWRmUTQ/0');
+        // callback(4, 'test', 'test', 'https://wx.qlogo.cn/mmopen/vi_32/X7ynBZUxuKr02zR2KOP8Ct1HCiagXka3FQdko7YJFKouuNZGvRLznYoe8LmzUvaVr0u4qiaicXIfc2sQh6dWRmUTQ/0', 12);
         // return;
         let users = realm.objects('User');
         if (users && 0 != users.length) {
             let user = users[0]
-            callback(user.userID, user.name, user.sign, user.avatar);
+            callback(user.userID, user.name, user.sign, user.avatar, user.memberID);
         }
         else {
-            callback(null, null, null, null);
+            callback(null, null, null, null, null);
         }
     });
 }
@@ -208,6 +218,7 @@ function setUser(userID,
     sign,
     phoneNumber,
     wxOpenID,
+    memberID,
     callback) {
     openRealm(false, realm => {
         try {
@@ -223,7 +234,8 @@ function setUser(userID,
                         name: name,
                         sign: sign,
                         phoneNumber: phoneNumber,
-                        wxOpenID: wxOpenID
+                        wxOpenID: wxOpenID,
+                        memberID: memberID,
                     },
                     true
                 );
@@ -292,12 +304,12 @@ function getTemplateDetail(id, callback) {
 }
 
 function getGoodsList(pageIndex, pageSize, callback) {
-    checkUser((id, name, label, avatar) => {
+    checkUser((id, name, label, avatar, memberid) => {
         if (!id) {
             callback(null, '没有找到有效的用户信息');
         }
         let formData = new FormData();
-        formData.append('user_id', id);
+        formData.append('user_id', memberid);
         formData.append('port', 8081);
         formData.append('goods_state', 1);
         formData.append('page', pageIndex);
@@ -450,6 +462,7 @@ function wechatLogin(token, callback) {
                     result['data']['store_title'],
                     result['data']['phone'],
                     '',
+                    result['data']['member_id'],
                     (succes, msg) => {
                         callback(succes, msg)
                     }

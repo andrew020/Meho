@@ -35,7 +35,7 @@ export default class GoodsList extends Component {
     }
 
     _getUser = () => {
-        DataCenter.checkUser((id, name, label, avatar) => {
+        DataCenter.checkUser((id, name, label, avatar, memberid) => {
             if (!id) {
                 this.props.navigation.navigate('LoginPage', { doLogin: this._getUser });
             }

@@ -115,13 +115,13 @@ export default class EditContent extends Component {
                             this.goodsCodeUrl = data;
                         }
 
-                        DataCenter.checkUser((id, name, label, avatar) => {
+                        DataCenter.checkUser((id, name, label, avatar, memberid) => {
                             NativeModules.ImageDrawer.drawGoods(newDatas, this.state.title, this.state.price, imageTemplate, this.goodsCodeUrl, avatar, callback);
                         });
                     });
                 }
                 else {
-                    DataCenter.checkUser((id, name, label, avatar) => {
+                    DataCenter.checkUser((id, name, label, avatar, memberid) => {
                         NativeModules.ImageDrawer.drawGoods(newDatas, this.state.title, this.state.price, imageTemplate, this.goodsCodeUrl, avatar, callback);
                     });
                 }

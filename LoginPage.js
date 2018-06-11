@@ -330,8 +330,8 @@ export default class LoginPage extends Component {
             .then((response) => response.json())
             .then((result) => {
                 console.log(result);
-                this.stopOTPTimer();
                 if (result['code'] !== 1) {
+                    this.stopOTPTimer();
                     Alert.alert(
                         "登录",
                         result['msg']
