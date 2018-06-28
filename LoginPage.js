@@ -274,7 +274,7 @@ export default class LoginPage extends Component {
                 codeComing: 59,
             }, () => {
                 this.startOTPTimer();
-                
+
                 let formData = new FormData();
                 formData.append('phone', text);
                 formData.append('port', 8081);
@@ -461,48 +461,52 @@ export default class LoginPage extends Component {
         }
     }
 
+    _wechatLoginHandler = (responseCode) => {
+        console.log(responseCode.code);
+        DataCenter.wechatLogin(
+            responseCode.code,
+            (succes, msg) => {
+                if (succes) {
+                    const { navigation } = this.props;
+                    navigation.goBack();
+                    navigation.state.params.doLogin();
+                }
+                else {
+                    Alert.alert(
+                        "登录",
+                        msg
+                    );
+                }
+            }
+        );
+    }
+
+    _wechatLoginErrorHandler = (err) => {
+        Alert.alert('登录授权发生错误：', err.message, [
+            { text: '确定' }
+        ]);
+    }
+
     _wechatLogin = () => {
         let scope = 'snsapi_userinfo';
         let state = 'wechat_sdk_demo';
 
         wechat.isWXAppInstalled()
             .then((isInstalled) => {
+                isInstalled = false;
                 if (isInstalled) {
                     wechat.sendAuthRequest(scope, state)
-                        .then(responseCode => {
-                            console.log(responseCode.code);
-                            DataCenter.wechatLogin(
-                                responseCode.code,
-                                (succes, msg) => {
-                                    if (succes) {
-                                        const { navigation } = this.props;
-                                        navigation.goBack();
-                                        navigation.state.params.doLogin();
-                                    }
-                                    else {
-                                        Alert.alert(
-                                            "登录",
-                                            msg
-                                        );
-                                    }
-                                }
-                            );
-                        })
-                        .catch(err => {
-                            Alert.alert('登录授权发生错误：', err.message, [
-                                { text: '确定' }
-                            ]);
-                        })
+                        .then(this._wechatLoginHandler)
+                        .catch(this._wechatLoginErrorHandler);
                 }
                 else {
                     Platform.OS == 'ios' ?
-                        Alert.alert('没有安装微信', '是否安装微信？', [
-                            { text: '取消' },
-                            { text: '确定', onPress: () => this.installWechat() }
-                        ]) :
+                        wechat.sendAuthRequestWithoutApp(scope, state)
+                            .then(this._wechatLoginHandler)
+                            .catch(this._wechatLoginErrorHandler) :
                         Alert.alert('没有安装微信', '请先安装微信客户端在进行登录', [
                             { text: '确定' }
-                        ])
+                        ]);
                 }
             })
     }
