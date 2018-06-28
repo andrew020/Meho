@@ -58,9 +58,21 @@ export default class Favourites extends Component {
     }
 
     _sharing = (item) => {
+        var images = [];
+        for (var index = 0; index < item['images'].length; index++) {
+            var imageInfo = item['images'][index];
+            var image = ''
+            if (imageInfo.imageBase64) {
+                image = imageInfo.imageBase64;
+            }
+            else {
+                image = imageInfo.imageString;
+            }
+            images.push(image);
+        }
         var option = {
             text: item['text'],
-            imagesUrl:  Constants.convertImagesURLWithMedial(item['images']),
+            imagesUrl:  Constants.convertImagesURLWithMedial(images),
             callback: (error) => {
                 if (!error) {
                     alert("这是回调方法")
