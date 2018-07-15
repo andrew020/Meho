@@ -162,7 +162,7 @@ RCT_EXPORT_METHOD(
   UIGraphicsBeginImageContext(
                               CGSizeMake(
                                          [backgroundPoints[0] floatValue] * scale + [backgroundPoints[2] floatValue] * scale ,
-                                         [backgroundPoints[1] floatValue] * scale  + [backgroundPoints[3] floatValue] * scale 
+                                         [backgroundPoints[1] floatValue] * scale  + [backgroundPoints[3] floatValue] * scale
                                          )
                               );
   if (backgroundImage) {
@@ -170,6 +170,29 @@ RCT_EXPORT_METHOD(
     [backgroundImage drawInRect:rect];
   }
   if (goodsImage) {
+    CGSize imageSize = goodsImage.size;
+    CGFloat areaScale = [imagePoints[2] floatValue] / [imagePoints[3] floatValue];
+    CGFloat imageScale = imageSize.width / imageSize.height;
+    if (imageScale > areaScale) {
+      CGFloat resizeWidth = imageSize.height * areaScale;
+      CGRect rect = CGRectMake((imageSize.width - resizeWidth) / 2., 0, resizeWidth, imageSize.height);
+      CGImageRef newImageRef = CGImageCreateWithImageInRect(goodsImage.CGImage, rect);
+      goodsImage = [UIImage imageWithCGImage:newImageRef];
+    }
+    else if (imageScale < areaScale) {
+      CGFloat resizeHeight = imageSize.width / areaScale;
+      CGRect rect = CGRectMake(0, (imageSize.height - resizeHeight) / 2., imageSize.width, resizeHeight);
+      CGImageRef newImageRef = CGImageCreateWithImageInRect(goodsImage.CGImage, rect);
+      goodsImage = [UIImage imageWithCGImage:newImageRef];
+    }
+    
+    if ([imagePoints[2] floatValue] / imageSize.width > [imagePoints[3] floatValue] / imageSize.height) {
+      
+    }
+    else {
+      
+    }
+    
     CGRect rect = CGRectMake([imagePoints[0] floatValue] * scale , [imagePoints[1] floatValue] * scale , [imagePoints[2] floatValue] * scale , [imagePoints[3] floatValue] * scale );
     [goodsImage drawInRect:rect];
   }

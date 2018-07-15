@@ -71,7 +71,7 @@ export default class Favourites extends Component {
             images.push(image);
         }
         var option = {
-            text: item['text'],
+            text: "#" + item['title'] + "#" +item['text'],
             imagesUrl:  Constants.convertImagesURLWithMedial(images),
             callback: (error) => {
                 if (!error) {

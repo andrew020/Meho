@@ -269,7 +269,22 @@ public class ImageDrawer extends ReactContextBaseJavaModule implements ImageCach
     private void drawBitmap(Canvas cv, Bitmap bitmap, Integer[] points) {
         if (null != bitmap) {
             Rect rect = new Rect(points[0], points[1], points[0] + points[2], points[1] + points[3]);
-            cv.drawBitmap(bitmap, null, rect, null);
+            Rect sourceRect = null;
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            float areaScale = (float)points[2] / (float)points[3];
+            float imageScale = (float)width / (float)height;
+            if (imageScale > areaScale) {
+                int resizeWidth = (int)(height * areaScale);
+                int x = (width - resizeWidth) / 2;
+                sourceRect = new Rect(x, 0, x + resizeWidth, height);
+            }
+            else if ((imageScale < areaScale)) {
+                int resizeHeight = (int)(width / areaScale);
+                int y = (height - resizeHeight) / 2;
+                sourceRect = new Rect(0, y, width, y + resizeHeight);
+            }
+            cv.drawBitmap(bitmap, sourceRect, rect, null);
         }
     }
 

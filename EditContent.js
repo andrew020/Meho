@@ -192,7 +192,7 @@ export default class EditContent extends Component {
         this.props.navigation.navigate(
             'Sharing',
             {
-                text: this.state.description,
+                text: "#" + this.state.title + "#" + this.state.description,
                 images: images,
             }
         )
@@ -211,8 +211,9 @@ export default class EditContent extends Component {
             }
             images.push(image);
         }
+        var newDescription = "#" + this.state.title + "#" + this.state.description;
         var option = {
-            text: this.state.description,
+            text: newDescription,
             imagesUrl: Constants.convertImagesURLWithMedial(images),
             callback: (error) => {
                 if (!error) {

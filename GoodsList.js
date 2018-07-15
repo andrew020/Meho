@@ -66,15 +66,16 @@ export default class GoodsList extends Component {
                         datas: results,
                     });
                 }
-
-                if (msg && msg.length) {
+                else {
                     this.setState({
                         isFetching: false,
                     }, () => {
-                        Alert.alert(
-                            "商品",
-                            msg,
-                        );
+                        if (msg && msg.length) {
+                            Alert.alert(
+                                "商品",
+                                msg,
+                            );
+                        }
                     });
                 }
             });
@@ -94,11 +95,13 @@ export default class GoodsList extends Component {
                         datas: this.state.datas.concat(results),
                     },
                     () => {
-                        this.laodingMore = true;
+                        this.laodingMore = false;
                     }
                 );
             }
-
+            else {
+                this.laodingMore = false;
+            }
             if (msg && msg.length) {
                 Alert(
                     "商品",
@@ -135,8 +138,9 @@ export default class GoodsList extends Component {
     }
 
     _sharing = (item) => {
+        var newDescription = "#" + item['name'] + "#" + item['description'];
         var option = {
-            text: item['description'],
+            text: newDescription,
             imagesUrl: Constants.convertImagesURLWithMedial(item['images']),
             callback: (error) => {
                 if (!error) {
